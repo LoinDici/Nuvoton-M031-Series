@@ -24511,9 +24511,9 @@ int main(void)
 		while(1);
 	} else
 		printf("Flash found: W25Q32 ...\n");
-	
-	 
-  SpiFlash_BlockErase64KB(0);
+#line 110 "..\\main.c"
+	SpiFlash_ChipErase();	
+
 
 	 
 	SpiFlash_WaitReady();

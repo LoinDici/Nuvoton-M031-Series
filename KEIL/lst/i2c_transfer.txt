@@ -5,12 +5,12 @@
                           AREA ||i.I2C0_Close||, CODE, READONLY, ALIGN=2
 
                   I2C0_Close PROC
-;;;176    
-;;;177    void I2C0_Close(void)
+;;;177    
+;;;178    void I2C0_Close(void)
 000000  b510              PUSH     {r4,lr}
-;;;178    {
-;;;179        /* Disable I2C0 interrupt and clear corresponding NVIC bit */
-;;;180        I2C_DisableInt(I2C0);
+;;;179    {
+;;;180        /* Disable I2C0 interrupt and clear corresponding NVIC bit */
+;;;181        I2C_DisableInt(I2C0);
 000002  4c07              LDR      r4,|L1.32|
 000004  4620              MOV      r0,r4
 000006  f7fffffe          BL       I2C_DisableInt
@@ -18,17 +18,17 @@
 00000c  4a05              LDR      r2,|L1.36|
 00000e  0489              LSLS     r1,r1,#18
 000010  6011              STR      r1,[r2,#0]
-;;;181        NVIC_DisableIRQ(I2C0_IRQn);
-;;;182    
-;;;183        /* Disable I2C0 and close I2C0 clock */
-;;;184        I2C_Close(I2C0);
+;;;182        NVIC_DisableIRQ(I2C0_IRQn);
+;;;183    
+;;;184        /* Disable I2C0 and close I2C0 clock */
+;;;185        I2C_Close(I2C0);
 000012  4620              MOV      r0,r4
 000014  f7fffffe          BL       I2C_Close
-;;;185        CLK_DisableModuleClock(I2C0_MODULE);
+;;;186        CLK_DisableModuleClock(I2C0_MODULE);
 000018  4803              LDR      r0,|L1.40|
 00001a  f7fffffe          BL       CLK_DisableModuleClock
-;;;186    
-;;;187    }
+;;;187    
+;;;188    }
 00001e  bd10              POP      {r4,pc}
                           ENDP
 
@@ -95,60 +95,60 @@
                           REQUIRE _printf_d
                           REQUIRE _printf_int_dec
                   I2C0_Init PROC
-;;;148    
-;;;149    void I2C0_Init(void)
+;;;149    
+;;;150    void I2C0_Init(void)
 000000  b510              PUSH     {r4,lr}
-;;;150    {
-;;;151        /* Open I2C module and set bus clock */
-;;;152        I2C_Open(I2C0, 400000);
+;;;151    {
+;;;152        /* Open I2C module and set bus clock */
+;;;153        I2C_Open(I2C0, 400000);
 000002  4c0f              LDR      r4,|L3.64|
 000004  490d              LDR      r1,|L3.60|
 000006  4620              MOV      r0,r4
 000008  f7fffffe          BL       I2C_Open
-;;;153    
-;;;154        /* Get I2C0 Bus Clock */
-;;;155        printf("I2C clock %d Hz\n", I2C_GetBusClockFreq(I2C0));
+;;;154    
+;;;155        /* Get I2C0 Bus Clock */
+;;;156        printf("I2C clock %d Hz\n", I2C_GetBusClockFreq(I2C0));
 00000c  4620              MOV      r0,r4
 00000e  f7fffffe          BL       I2C_GetBusClockFreq
 000012  4601              MOV      r1,r0
 000014  a00b              ADR      r0,|L3.68|
 000016  f7fffffe          BL       __2printf
-;;;156    
-;;;157        /* Set I2C 4 Slave Addresses */
-;;;158        I2C_SetSlaveAddr(I2C0, 0, 0x15, 0);   /* Slave Address : 0x15 */
+;;;157    
+;;;158        /* Set I2C 4 Slave Addresses */
+;;;159        I2C_SetSlaveAddr(I2C0, 0, 0x15, 0);   /* Slave Address : 0x15 */
 00001a  2300              MOVS     r3,#0
 00001c  2215              MOVS     r2,#0x15
 00001e  4619              MOV      r1,r3
 000020  4620              MOV      r0,r4
 000022  f7fffffe          BL       I2C_SetSlaveAddr
-;;;159    #if 0
-;;;160    		I2C_SetSlaveAddr(I2C0, 1, 0x35, 0);   /* Slave Address : 0x35 */
-;;;161        I2C_SetSlaveAddr(I2C0, 2, 0x55, 0);   /* Slave Address : 0x55 */
-;;;162        I2C_SetSlaveAddr(I2C0, 3, 0x75, 0);   /* Slave Address : 0x75 */
-;;;163    
-;;;164        I2C_SetSlaveAddrMask(I2C0, 0, 0x01);
-;;;165        I2C_SetSlaveAddrMask(I2C0, 1, 0x04);
-;;;166        I2C_SetSlaveAddrMask(I2C0, 2, 0x01);
-;;;167        I2C_SetSlaveAddrMask(I2C0, 3, 0x04);
-;;;168    #endif
-;;;169        /* Enable I2C interrupt */
-;;;170        I2C_EnableInt(I2C0);
+;;;160    #if 0
+;;;161    		I2C_SetSlaveAddr(I2C0, 1, 0x35, 0);   /* Slave Address : 0x35 */
+;;;162        I2C_SetSlaveAddr(I2C0, 2, 0x55, 0);   /* Slave Address : 0x55 */
+;;;163        I2C_SetSlaveAddr(I2C0, 3, 0x75, 0);   /* Slave Address : 0x75 */
+;;;164    
+;;;165        I2C_SetSlaveAddrMask(I2C0, 0, 0x01);
+;;;166        I2C_SetSlaveAddrMask(I2C0, 1, 0x04);
+;;;167        I2C_SetSlaveAddrMask(I2C0, 2, 0x01);
+;;;168        I2C_SetSlaveAddrMask(I2C0, 3, 0x04);
+;;;169    #endif
+;;;170        /* Enable I2C interrupt */
+;;;171        I2C_EnableInt(I2C0);
 000026  4620              MOV      r0,r4
 000028  f7fffffe          BL       I2C_EnableInt
 00002c  2001              MOVS     r0,#1
 00002e  490a              LDR      r1,|L3.88|
 000030  0480              LSLS     r0,r0,#18
 000032  6008              STR      r0,[r1,#0]
-;;;171        NVIC_EnableIRQ(I2C0_IRQn);
-;;;172    		
-;;;173    		/* I2C function to Slave receive/transmit data */
-;;;174        s_I2C0HandlerFn = I2C_SlaveTRx;
+;;;172        NVIC_EnableIRQ(I2C0_IRQn);
+;;;173    		
+;;;174    		/* I2C function to Slave receive/transmit data */
+;;;175        s_I2C0HandlerFn = I2C_SlaveTRx;
 000034  490a              LDR      r1,|L3.96|
 000036  4809              LDR      r0,|L3.92|
 000038  6048              STR      r0,[r1,#4]  ; s_I2C0HandlerFn
-;;;175    }
+;;;176    }
 00003a  bd10              POP      {r4,pc}
-;;;176    
+;;;177    
                           ENDP
 
                   |L3.60|
@@ -199,8 +199,6 @@
                           AREA ||i.I2C_SlaveTRx||, CODE, READONLY, ALIGN=2
 
                           REQUIRE _printf_percent
-                          REQUIRE _printf_d
-                          REQUIRE _printf_int_dec
                           REQUIRE _printf_x
                           REQUIRE _printf_longlong_hex
                   I2C_SlaveTRx PROC
@@ -218,8 +216,8 @@
 ;;;73     		  u32Count = 0;
 ;;;74           I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
 000004  273c              MOVS     r7,#0x3c
-000006  4d4a              LDR      r5,|L5.304|
-000008  4c4a              LDR      r4,|L5.308|
+000006  4d45              LDR      r5,|L5.284|
+000008  4c45              LDR      r4,|L5.288|
 00000a  28a0              CMP      r0,#0xa0              ;70
                   |L5.12|
 00000c  d006              BEQ      |L5.28|
@@ -231,14 +229,14 @@
 000018  2888              CMP      r0,#0x88              ;70
 00001a  d106              BNE      |L5.42|
                   |L5.28|
-00001c  e086              B        |L5.300|
+00001c  e07b              B        |L5.278|
                   |L5.30|
 00001e  28a8              CMP      r0,#0xa8              ;70
-000020  d05e              BEQ      |L5.224|
+000020  d054              BEQ      |L5.204|
 000022  28b8              CMP      r0,#0xb8              ;70
-000024  d06a              BEQ      |L5.252|
+000024  d060              BEQ      |L5.232|
 000026  28c0              CMP      r0,#0xc0              ;70
-000028  d073              BEQ      |L5.274|
+000028  d068              BEQ      |L5.252|
                   |L5.42|
 ;;;75     		break;
 ;;;76     		case 0x80:	/* Previously address with own SLA address Data has been received; ACK has been returned*/
@@ -250,81 +248,82 @@
 ;;;82     				flash_addr = (g_au8SlvRxData[1] << 16) + (g_au8SlvRxData[2] << 8) + (g_au8SlvRxData[3]);
 ;;;83     				slave_buff_addr = (g_au8SlvRxData[4] << 16) + (g_au8SlvRxData[5] << 8) + (g_au8SlvRxData[6]);
 ;;;84     
-;;;85     				if (g_u8SlvDataLen == 4)
-;;;86     					printf("flash addr:%d\n", flash_addr);
-;;;87     				if (g_u8SlvDataLen == 7)
-;;;88     					printf("slave_buff_addr:%d\n", slave_buff_addr);
+;;;85     //				if (g_u8SlvDataLen == 4)
+;;;86     //					printf("flash addr:%d\n", flash_addr);
+;;;87     //				if (g_u8SlvDataLen == 7)
+;;;88     //					printf("slave_buff_addr:%d\n", slave_buff_addr);
 ;;;89     
 ;;;90     			  if (g_u8SlvDataLen == 7 && read_write_flag == 0xff) {
 ;;;91     					printf("Normal read...");
 ;;;92     					/* page read */
 ;;;93     					SpiFlash_NormalRead(flash_addr, slave_buff_addr);
 ;;;94     					SpiFlash_WaitReady();
-;;;95     	//				printf("OK\n");
+;;;95     					printf("OK\n");
 ;;;96     					}
 ;;;97     			}	else {
 ;;;98     //				printf("u32Count:%d\n", u32Count);
 ;;;99     				g_au8SlvData[u32Count++] = u8data;
 ;;;100    				if (u32Count == slave_buff_addr) {
-;;;101    						printf("Start to normal write data to Flash ...");
-;;;102    						SpiFlash_NormalPageProgram(flash_addr, slave_buff_addr);
-;;;103    						SpiFlash_WaitReady();
+;;;101    					printf("Start to normal write data to Flash ...");
+;;;102    					SpiFlash_NormalPageProgram(flash_addr, slave_buff_addr);
+;;;103    					SpiFlash_WaitReady();
 ;;;104    					u32Count = 0;
-;;;105    				} else if (u32Count > slave_buff_addr) {
-;;;106    					printf("Error not left space\n");
-;;;107    					u32Count = 0;
-;;;108    				}
-;;;109    			}
-;;;110    			I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
-;;;111    		break;
-;;;112    		case 0xA8:	/* Own SLA+R has been receive; ACK has been return */
-;;;113    			  SpiFlash_WaitReady();
-;;;114    				u8data = (unsigned char)I2C_GET_DATA(I2C0);
-;;;115    				slave_buff_addr = 0;
-;;;116    				//printf("send data:%x\n", g_au8SlvData[slave_buff_addr]);
-;;;117    				I2C_SET_DATA(I2C0, slave_buff_addr);
-;;;118    				I2C_SET_DATA(I2C0, g_u8SlvTxData[slave_buff_addr]);
-;;;119            slave_buff_addr++;
-;;;120            I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
-;;;121    		break;
-;;;122    		case 0xB8:	/* Data byte in I2CDAT has been transmitted ACK has been received */
-;;;123    			SpiFlash_WaitReady();
-;;;124    			I2C_SET_DATA(I2C0, g_u8SlvTxData[slave_buff_addr++]);
-;;;125          I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
-;;;126    		break;
-;;;127    		case 0xC0:	/* Data byte or last data in I2CDAT has been transmitted Not ACK has been received */
-;;;128    			I2C_SET_DATA(I2C0, g_u8SlvTxData[slave_buff_addr++]);
-;;;129    			slave_buff_addr = 0;
-;;;130          I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
-;;;131    		break;
-;;;132    		case 0x88:	/* Previously addressed with own SLA address; NOT ACK has been returned */
-;;;133    			g_u8SlvDataLen = 0;
-;;;134    			u32Count = 0;
-;;;135          I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
-;;;136    		break;
-;;;137    		case 0xA0:	/* A STOP or repeated START has been received while still addressed as Slave/Receiver*/
-;;;138    			g_u8SlvDataLen = 0;
-;;;139    			u32Count = 0;
-;;;140          I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
-;;;141    		break;
-;;;142    		default:
-;;;143    			printf("Status 0x%x is NOT processed\n", u32Status);
+;;;105    					printf("OK\n");
+;;;106    				} else if (u32Count > slave_buff_addr) {
+;;;107    					printf("Error not left space\n");
+;;;108    					u32Count = 0;
+;;;109    				}
+;;;110    			}
+;;;111    			I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
+;;;112    		break;
+;;;113    		case 0xA8:	/* Own SLA+R has been receive; ACK has been return */
+;;;114    			  SpiFlash_WaitReady();
+;;;115    				u8data = (unsigned char)I2C_GET_DATA(I2C0);
+;;;116    				slave_buff_addr = 0;
+;;;117    				//printf("send data:%x\n", g_au8SlvData[slave_buff_addr]);
+;;;118    				I2C_SET_DATA(I2C0, slave_buff_addr);
+;;;119    				I2C_SET_DATA(I2C0, g_u8SlvTxData[slave_buff_addr]);
+;;;120            slave_buff_addr++;
+;;;121            I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
+;;;122    		break;
+;;;123    		case 0xB8:	/* Data byte in I2CDAT has been transmitted ACK has been received */
+;;;124    			SpiFlash_WaitReady();
+;;;125    			I2C_SET_DATA(I2C0, g_u8SlvTxData[slave_buff_addr++]);
+;;;126          I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
+;;;127    		break;
+;;;128    		case 0xC0:	/* Data byte or last data in I2CDAT has been transmitted Not ACK has been received */
+;;;129    			I2C_SET_DATA(I2C0, g_u8SlvTxData[slave_buff_addr++]);
+;;;130    			slave_buff_addr = 0;
+;;;131          I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
+;;;132    		break;
+;;;133    		case 0x88:	/* Previously addressed with own SLA address; NOT ACK has been returned */
+;;;134    			g_u8SlvDataLen = 0;
+;;;135    			u32Count = 0;
+;;;136          I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
+;;;137    		break;
+;;;138    		case 0xA0:	/* A STOP or repeated START has been received while still addressed as Slave/Receiver*/
+;;;139    			g_u8SlvDataLen = 0;
+;;;140    			u32Count = 0;
+;;;141          I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
+;;;142    		break;
+;;;143    		default:
+;;;144    			printf("Status 0x%x is NOT processed\n", u32Status);
 00002a  4601              MOV      r1,r0
-00002c  a042              ADR      r0,|L5.312|
+00002c  a03d              ADR      r0,|L5.292|
 00002e  f7fffffe          BL       __2printf
-;;;144    		break;
-;;;145    	}
-;;;146    	return;
-;;;147    }
+;;;145    		break;
+;;;146    	}
+;;;147    	return;
+;;;148    }
 000032  bdf8              POP      {r3-r7,pc}
                   |L5.52|
 000034  68a8              LDR      r0,[r5,#8]            ;77
 000036  b2c1              UXTB     r1,r0                 ;77
 000038  7860              LDRB     r0,[r4,#1]            ;79  ; g_u8SlvDataLen
 00003a  2807              CMP      r0,#7                 ;79
-00003c  d236              BCS      |L5.172|
+00003c  d228              BCS      |L5.144|
 00003e  7862              LDRB     r2,[r4,#1]            ;80  ; g_u8SlvDataLen
-000040  483c              LDR      r0,|L5.308|
+000040  4837              LDR      r0,|L5.288|
 000042  3014              ADDS     r0,r0,#0x14           ;80
 000044  1883              ADDS     r3,r0,r2              ;80
 000046  1c52              ADDS     r2,r2,#1              ;80
@@ -348,160 +347,140 @@
 00006a  1889              ADDS     r1,r1,r2              ;83
 00006c  1808              ADDS     r0,r1,r0              ;83
 00006e  60e0              STR      r0,[r4,#0xc]          ;83  ; slave_buff_addr
-000070  7860              LDRB     r0,[r4,#1]            ;85  ; g_u8SlvDataLen
-000072  2804              CMP      r0,#4                 ;85
-000074  d103              BNE      |L5.126|
-000076  6921              LDR      r1,[r4,#0x10]         ;86  ; flash_addr
-000078  a037              ADR      r0,|L5.344|
-00007a  f7fffffe          BL       __2printf
-                  |L5.126|
-00007e  7860              LDRB     r0,[r4,#1]            ;87  ; g_u8SlvDataLen
-000080  2807              CMP      r0,#7                 ;87
-000082  d103              BNE      |L5.140|
-000084  68e1              LDR      r1,[r4,#0xc]          ;88  ; slave_buff_addr
-000086  a038              ADR      r0,|L5.360|
-000088  f7fffffe          BL       __2printf
-                  |L5.140|
-00008c  7860              LDRB     r0,[r4,#1]            ;90  ; g_u8SlvDataLen
-00008e  2807              CMP      r0,#7                 ;90
-000090  d147              BNE      |L5.290|
-000092  7820              LDRB     r0,[r4,#0]            ;90  ; read_write_flag
-000094  28ff              CMP      r0,#0xff              ;90
-000096  d144              BNE      |L5.290|
-000098  a038              ADR      r0,|L5.380|
-00009a  f7fffffe          BL       __2printf
-00009e  68e1              LDR      r1,[r4,#0xc]          ;93  ; slave_buff_addr
-0000a0  6920              LDR      r0,[r4,#0x10]         ;93  ; flash_addr
-0000a2  f7fffffe          BL       SpiFlash_NormalRead
-0000a6  f7fffffe          BL       SpiFlash_WaitReady
-0000aa  e03a              B        |L5.290|
-                  |L5.172|
-0000ac  4837              LDR      r0,|L5.396|
-0000ae  68a2              LDR      r2,[r4,#8]            ;99  ; u32Count
-0000b0  5481              STRB     r1,[r0,r2]            ;99
-0000b2  1c52              ADDS     r2,r2,#1              ;99
-0000b4  60a2              STR      r2,[r4,#8]            ;100  ; u32Count
-0000b6  68e0              LDR      r0,[r4,#0xc]          ;100  ; slave_buff_addr
-0000b8  4282              CMP      r2,r0                 ;100
-0000ba  d109              BNE      |L5.208|
-0000bc  a034              ADR      r0,|L5.400|
-0000be  f7fffffe          BL       __2printf
-0000c2  68e1              LDR      r1,[r4,#0xc]          ;102  ; slave_buff_addr
-0000c4  6920              LDR      r0,[r4,#0x10]         ;102  ; flash_addr
-0000c6  f7fffffe          BL       SpiFlash_NormalPageProgram
-0000ca  f7fffffe          BL       SpiFlash_WaitReady
-0000ce  e005              B        |L5.220|
-                  |L5.208|
-0000d0  68e0              LDR      r0,[r4,#0xc]          ;105  ; slave_buff_addr
-0000d2  4282              CMP      r2,r0                 ;105
-0000d4  d925              BLS      |L5.290|
-0000d6  a038              ADR      r0,|L5.440|
-0000d8  f7fffffe          BL       __2printf
-                  |L5.220|
-0000dc  60a6              STR      r6,[r4,#8]            ;107  ; u32Count
-0000de  e020              B        |L5.290|
-                  |L5.224|
-0000e0  f7fffffe          BL       SpiFlash_WaitReady
-0000e4  68a8              LDR      r0,[r5,#8]            ;114
-0000e6  60e6              STR      r6,[r4,#0xc]          ;115  ; slave_buff_addr
-0000e8  68e0              LDR      r0,[r4,#0xc]          ;117  ; slave_buff_addr
-0000ea  60a8              STR      r0,[r5,#8]            ;117
-0000ec  4838              LDR      r0,|L5.464|
-0000ee  68e1              LDR      r1,[r4,#0xc]          ;118  ; slave_buff_addr
-0000f0  5c40              LDRB     r0,[r0,r1]            ;118
-0000f2  60a8              STR      r0,[r5,#8]            ;118
-0000f4  68e0              LDR      r0,[r4,#0xc]          ;119  ; slave_buff_addr
-0000f6  1c40              ADDS     r0,r0,#1              ;119
-0000f8  60e0              STR      r0,[r4,#0xc]          ;119  ; slave_buff_addr
-0000fa  e012              B        |L5.290|
+000070  7860              LDRB     r0,[r4,#1]            ;90  ; g_u8SlvDataLen
+000072  2807              CMP      r0,#7                 ;90
+000074  d14a              BNE      |L5.268|
+000076  7820              LDRB     r0,[r4,#0]            ;90  ; read_write_flag
+000078  28ff              CMP      r0,#0xff              ;90
+00007a  d147              BNE      |L5.268|
+00007c  a031              ADR      r0,|L5.324|
+00007e  f7fffffe          BL       __2printf
+000082  68e1              LDR      r1,[r4,#0xc]          ;93  ; slave_buff_addr
+000084  6920              LDR      r0,[r4,#0x10]         ;93  ; flash_addr
+000086  f7fffffe          BL       SpiFlash_NormalRead
+00008a  f7fffffe          BL       SpiFlash_WaitReady
+00008e  e011              B        |L5.180|
+                  |L5.144|
+000090  4830              LDR      r0,|L5.340|
+000092  68a2              LDR      r2,[r4,#8]            ;99  ; u32Count
+000094  5481              STRB     r1,[r0,r2]            ;99
+000096  1c52              ADDS     r2,r2,#1              ;99
+000098  60a2              STR      r2,[r4,#8]            ;100  ; u32Count
+00009a  68e0              LDR      r0,[r4,#0xc]          ;100  ; slave_buff_addr
+00009c  4282              CMP      r2,r0                 ;100
+00009e  d10d              BNE      |L5.188|
+0000a0  a02d              ADR      r0,|L5.344|
+0000a2  f7fffffe          BL       __2printf
+0000a6  68e1              LDR      r1,[r4,#0xc]          ;102  ; slave_buff_addr
+0000a8  6920              LDR      r0,[r4,#0x10]         ;102  ; flash_addr
+0000aa  f7fffffe          BL       SpiFlash_NormalPageProgram
+0000ae  f7fffffe          BL       SpiFlash_WaitReady
+0000b2  60a6              STR      r6,[r4,#8]            ;104  ; u32Count
+                  |L5.180|
+0000b4  a032              ADR      r0,|L5.384|
+0000b6  f7fffffe          BL       __2printf
+0000ba  e027              B        |L5.268|
+                  |L5.188|
+0000bc  68e0              LDR      r0,[r4,#0xc]          ;106  ; slave_buff_addr
+0000be  4282              CMP      r2,r0                 ;106
+0000c0  d924              BLS      |L5.268|
+0000c2  a030              ADR      r0,|L5.388|
+0000c4  f7fffffe          BL       __2printf
+                  |L5.200|
+0000c8  60a6              STR      r6,[r4,#8]            ;73  ; u32Count
+0000ca  e01f              B        |L5.268|
+                  |L5.204|
+0000cc  f7fffffe          BL       SpiFlash_WaitReady
+0000d0  68a8              LDR      r0,[r5,#8]            ;115
+0000d2  60e6              STR      r6,[r4,#0xc]          ;116  ; slave_buff_addr
+0000d4  68e0              LDR      r0,[r4,#0xc]          ;118  ; slave_buff_addr
+0000d6  60a8              STR      r0,[r5,#8]            ;118
+0000d8  4830              LDR      r0,|L5.412|
+0000da  68e1              LDR      r1,[r4,#0xc]          ;119  ; slave_buff_addr
+0000dc  5c40              LDRB     r0,[r0,r1]            ;119
+0000de  60a8              STR      r0,[r5,#8]            ;119
+0000e0  68e0              LDR      r0,[r4,#0xc]          ;120  ; slave_buff_addr
+0000e2  1c40              ADDS     r0,r0,#1              ;120
+0000e4  60e0              STR      r0,[r4,#0xc]          ;120  ; slave_buff_addr
+0000e6  e011              B        |L5.268|
+                  |L5.232|
+0000e8  f7fffffe          BL       SpiFlash_WaitReady
+0000ec  68e0              LDR      r0,[r4,#0xc]          ;125  ; slave_buff_addr
+0000ee  492b              LDR      r1,|L5.412|
+0000f0  1809              ADDS     r1,r1,r0              ;125
+0000f2  1c40              ADDS     r0,r0,#1              ;125
+0000f4  60e0              STR      r0,[r4,#0xc]          ;125  ; slave_buff_addr
+0000f6  7808              LDRB     r0,[r1,#0]            ;125
+0000f8  60a8              STR      r0,[r5,#8]            ;125
+0000fa  e007              B        |L5.268|
                   |L5.252|
-0000fc  f7fffffe          BL       SpiFlash_WaitReady
-000100  68e0              LDR      r0,[r4,#0xc]          ;124  ; slave_buff_addr
-000102  4933              LDR      r1,|L5.464|
-000104  1809              ADDS     r1,r1,r0              ;124
-000106  1c40              ADDS     r0,r0,#1              ;124
-000108  60e0              STR      r0,[r4,#0xc]          ;124  ; slave_buff_addr
-00010a  7808              LDRB     r0,[r1,#0]            ;124
-00010c  60a8              STR      r0,[r5,#8]            ;124
-00010e  e008              B        |L5.290|
-000110  e7ff              B        |L5.274|
-                  |L5.274|
-000112  68e0              LDR      r0,[r4,#0xc]          ;128  ; slave_buff_addr
-000114  492e              LDR      r1,|L5.464|
-000116  1809              ADDS     r1,r1,r0              ;128
-000118  1c40              ADDS     r0,r0,#1              ;128
-00011a  60e0              STR      r0,[r4,#0xc]          ;128  ; slave_buff_addr
-00011c  7808              LDRB     r0,[r1,#0]            ;128
-00011e  60a8              STR      r0,[r5,#8]            ;128
-000120  60e6              STR      r6,[r4,#0xc]          ;129  ; slave_buff_addr
-                  |L5.290|
-000122  6828              LDR      r0,[r5,#0]            ;140
-000124  43b8              BICS     r0,r0,r7              ;140
-000126  300c              ADDS     r0,r0,#0xc            ;140
-000128  6028              STR      r0,[r5,#0]            ;140
-00012a  bdf8              POP      {r3-r7,pc}
-                  |L5.300|
-00012c  7066              STRB     r6,[r4,#1]            ;138
-00012e  e7d5              B        |L5.220|
-;;;148    
+0000fc  68e0              LDR      r0,[r4,#0xc]          ;129  ; slave_buff_addr
+0000fe  4927              LDR      r1,|L5.412|
+000100  1809              ADDS     r1,r1,r0              ;129
+000102  1c40              ADDS     r0,r0,#1              ;129
+000104  60e0              STR      r0,[r4,#0xc]          ;129  ; slave_buff_addr
+000106  7808              LDRB     r0,[r1,#0]            ;129
+000108  60a8              STR      r0,[r5,#8]            ;129
+00010a  60e6              STR      r6,[r4,#0xc]          ;130  ; slave_buff_addr
+                  |L5.268|
+00010c  6828              LDR      r0,[r5,#0]            ;141
+00010e  43b8              BICS     r0,r0,r7              ;141
+000110  300c              ADDS     r0,r0,#0xc            ;141
+000112  6028              STR      r0,[r5,#0]            ;141
+000114  bdf8              POP      {r3-r7,pc}
+                  |L5.278|
+000116  7066              STRB     r6,[r4,#1]            ;139
+000118  e7d6              B        |L5.200|
+;;;149    
                           ENDP
 
-                  |L5.304|
+00011a  0000              DCW      0x0000
+                  |L5.284|
                           DCD      0x40080000
-                  |L5.308|
+                  |L5.288|
                           DCD      ||.data||
-                  |L5.312|
-000138  53746174          DCB      "Status 0x%x is NOT processed\n",0
-00013c  75732030
-000140  78257820
-000144  6973204e
-000148  4f542070
-00014c  726f6365
-000150  73736564
-000154  0a00    
-000156  00                DCB      0
-000157  00                DCB      0
-                  |L5.344|
-000158  666c6173          DCB      "flash addr:%d\n",0
-00015c  68206164
-000160  64723a25
-000164  640a00  
-000167  00                DCB      0
-                  |L5.360|
-000168  736c6176          DCB      "slave_buff_addr:%d\n",0
-00016c  655f6275
-000170  66665f61
-000174  6464723a
-000178  25640a00
-                  |L5.380|
-00017c  4e6f726d          DCB      "Normal read...",0
-000180  616c2072
-000184  6561642e
-000188  2e2e00  
-00018b  00                DCB      0
-                  |L5.396|
+                  |L5.292|
+000124  53746174          DCB      "Status 0x%x is NOT processed\n",0
+000128  75732030
+00012c  78257820
+000130  6973204e
+000134  4f542070
+000138  726f6365
+00013c  73736564
+000140  0a00    
+000142  00                DCB      0
+000143  00                DCB      0
+                  |L5.324|
+000144  4e6f726d          DCB      "Normal read...",0
+000148  616c2072
+00014c  6561642e
+000150  2e2e00  
+000153  00                DCB      0
+                  |L5.340|
                           DCD      ||.bss||
-                  |L5.400|
-000190  53746172          DCB      "Start to normal write data to Flash ...",0
-000194  7420746f
-000198  206e6f72
-00019c  6d616c20
-0001a0  77726974
-0001a4  65206461
-0001a8  74612074
-0001ac  6f20466c
-0001b0  61736820
-0001b4  2e2e2e00
-                  |L5.440|
-0001b8  4572726f          DCB      "Error not left space\n",0
-0001bc  72206e6f
-0001c0  74206c65
-0001c4  66742073
-0001c8  70616365
-0001cc  0a00    
-0001ce  00                DCB      0
-0001cf  00                DCB      0
-                  |L5.464|
+                  |L5.344|
+000158  53746172          DCB      "Start to normal write data to Flash ...",0
+00015c  7420746f
+000160  206e6f72
+000164  6d616c20
+000168  77726974
+00016c  65206461
+000170  74612074
+000174  6f20466c
+000178  61736820
+00017c  2e2e2e00
+                  |L5.384|
+000180  4f4b0a00          DCB      "OK\n",0
+                  |L5.388|
+000184  4572726f          DCB      "Error not left space\n",0
+000188  72206e6f
+00018c  74206c65
+000190  66742073
+000194  70616365
+000198  0a00    
+00019a  00                DCB      0
+00019b  00                DCB      0
+                  |L5.412|
                           DCD      ||.bss||+0x100
 
                           AREA ||.bss||, DATA, NOINIT, ALIGN=0

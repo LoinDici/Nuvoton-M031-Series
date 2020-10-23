@@ -123,36 +123,36 @@ Image Symbol Table
     i.I2C_Open                               0x000005f0   Section        0  i2c.o(i.I2C_Open)
     i.I2C_SetSlaveAddr                       0x00000638   Section        0  i2c.o(i.I2C_SetSlaveAddr)
     i.I2C_SlaveTRx                           0x00000658   Section        0  i2c_transfer.o(i.I2C_SlaveTRx)
-    i.SPI0_Init                              0x0000082c   Section        0  spi_transfer.o(i.SPI0_Init)
-    i.SPI_ClearRxFIFO                        0x00000868   Section        0  spi.o(i.SPI_ClearRxFIFO)
-    i.SPI_DisableAutoSS                      0x00000874   Section        0  spi.o(i.SPI_DisableAutoSS)
-    i.SPI_Open                               0x00000880   Section        0  spi.o(i.SPI_Open)
-    i.SYS_Init                               0x0000099c   Section        0  main.o(i.SYS_Init)
-    i.SendChar                               0x00000a24   Section        0  retarget.o(i.SendChar)
-    SendChar                                 0x00000a25   Thumb Code    26  retarget.o(i.SendChar)
-    i.SpiFlash_BlockErase64KB                0x00000a44   Section        0  spi_transfer.o(i.SpiFlash_BlockErase64KB)
-    i.SpiFlash_NormalPageProgram             0x00000aa0   Section        0  spi_transfer.o(i.SpiFlash_NormalPageProgram)
-    i.SpiFlash_NormalRead                    0x00000b18   Section        0  spi_transfer.o(i.SpiFlash_NormalRead)
-    i.SpiFlash_ReadMidDid                    0x00000b80   Section        0  spi_transfer.o(i.SpiFlash_ReadMidDid)
-    i.SpiFlash_ReadStatusReg                 0x00000bd0   Section        0  spi_transfer.o(i.SpiFlash_ReadStatusReg)
-    i.SpiFlash_WaitReady                     0x00000c04   Section        0  spi_transfer.o(i.SpiFlash_WaitReady)
-    i.SystemCoreClockUpdate                  0x00000c14   Section        0  system_m031series.o(i.SystemCoreClockUpdate)
-    i.SystemInit                             0x00000ca8   Section        0  system_m031series.o(i.SystemInit)
-    i.UART0_Init                             0x00000ce0   Section        0  main.o(i.UART0_Init)
-    i.UART_Open                              0x00000d0c   Section        0  uart.o(i.UART_Open)
-    i.__0printf$5                            0x00000df0   Section        0  printf5.o(i.__0printf$5)
-    i.__scatterload_copy                     0x00000e10   Section       14  handlers.o(i.__scatterload_copy)
-    i.__scatterload_null                     0x00000e1e   Section        2  handlers.o(i.__scatterload_null)
-    i.__scatterload_zeroinit                 0x00000e20   Section       14  handlers.o(i.__scatterload_zeroinit)
-    i._printf_core                           0x00000e30   Section        0  printf5.o(i._printf_core)
-    _printf_core                             0x00000e31   Thumb Code   680  printf5.o(i._printf_core)
-    i.fputc                                  0x00001104   Section        0  retarget.o(i.fputc)
-    i.main                                   0x00001110   Section        0  main.o(i.main)
-    i.stackDump                              0x000011b0   Section        0  retarget.o(i.stackDump)
-    stackDump                                0x000011b1   Thumb Code    70  retarget.o(i.stackDump)
-    .constdata                               0x00001258   Section       32  system_m031series.o(.constdata)
-    .constdata                               0x00001278   Section       56  clk.o(.constdata)
-    .constdata                               0x000012b0   Section       72  uart.o(.constdata)
+    i.SPI0_Init                              0x000007f8   Section        0  spi_transfer.o(i.SPI0_Init)
+    i.SPI_ClearRxFIFO                        0x00000834   Section        0  spi.o(i.SPI_ClearRxFIFO)
+    i.SPI_DisableAutoSS                      0x00000840   Section        0  spi.o(i.SPI_DisableAutoSS)
+    i.SPI_Open                               0x0000084c   Section        0  spi.o(i.SPI_Open)
+    i.SYS_Init                               0x00000968   Section        0  main.o(i.SYS_Init)
+    i.SendChar                               0x000009f0   Section        0  retarget.o(i.SendChar)
+    SendChar                                 0x000009f1   Thumb Code    26  retarget.o(i.SendChar)
+    i.SpiFlash_ChipErase                     0x00000a10   Section        0  spi_transfer.o(i.SpiFlash_ChipErase)
+    i.SpiFlash_NormalPageProgram             0x00000a5c   Section        0  spi_transfer.o(i.SpiFlash_NormalPageProgram)
+    i.SpiFlash_NormalRead                    0x00000ad4   Section        0  spi_transfer.o(i.SpiFlash_NormalRead)
+    i.SpiFlash_ReadMidDid                    0x00000b3c   Section        0  spi_transfer.o(i.SpiFlash_ReadMidDid)
+    i.SpiFlash_ReadStatusReg                 0x00000b8c   Section        0  spi_transfer.o(i.SpiFlash_ReadStatusReg)
+    i.SpiFlash_WaitReady                     0x00000bc0   Section        0  spi_transfer.o(i.SpiFlash_WaitReady)
+    i.SystemCoreClockUpdate                  0x00000bd0   Section        0  system_m031series.o(i.SystemCoreClockUpdate)
+    i.SystemInit                             0x00000c64   Section        0  system_m031series.o(i.SystemInit)
+    i.UART0_Init                             0x00000c9c   Section        0  main.o(i.UART0_Init)
+    i.UART_Open                              0x00000cc8   Section        0  uart.o(i.UART_Open)
+    i.__0printf$5                            0x00000dac   Section        0  printf5.o(i.__0printf$5)
+    i.__scatterload_copy                     0x00000dcc   Section       14  handlers.o(i.__scatterload_copy)
+    i.__scatterload_null                     0x00000dda   Section        2  handlers.o(i.__scatterload_null)
+    i.__scatterload_zeroinit                 0x00000ddc   Section       14  handlers.o(i.__scatterload_zeroinit)
+    i._printf_core                           0x00000dec   Section        0  printf5.o(i._printf_core)
+    _printf_core                             0x00000ded   Thumb Code   680  printf5.o(i._printf_core)
+    i.fputc                                  0x000010c0   Section        0  retarget.o(i.fputc)
+    i.main                                   0x000010cc   Section        0  main.o(i.main)
+    i.stackDump                              0x00001168   Section        0  retarget.o(i.stackDump)
+    stackDump                                0x00001169   Thumb Code    70  retarget.o(i.stackDump)
+    .constdata                               0x00001210   Section       32  system_m031series.o(.constdata)
+    .constdata                               0x00001230   Section       56  clk.o(.constdata)
+    .constdata                               0x00001268   Section       72  uart.o(.constdata)
     .data                                    0x20000000   Section       12  system_m031series.o(.data)
     .data                                    0x2000000c   Section        4  retarget.o(.data)
     .data                                    0x20000010   Section       27  i2c_transfer.o(.data)
@@ -282,33 +282,33 @@ Image Symbol Table
     I2C_GetBusClockFreq                      0x000005cd   Thumb Code    30  i2c.o(i.I2C_GetBusClockFreq)
     I2C_Open                                 0x000005f1   Thumb Code    66  i2c.o(i.I2C_Open)
     I2C_SetSlaveAddr                         0x00000639   Thumb Code    32  i2c.o(i.I2C_SetSlaveAddr)
-    I2C_SlaveTRx                             0x00000659   Thumb Code   304  i2c_transfer.o(i.I2C_SlaveTRx)
-    SPI0_Init                                0x0000082d   Thumb Code    48  spi_transfer.o(i.SPI0_Init)
-    SPI_ClearRxFIFO                          0x00000869   Thumb Code    12  spi.o(i.SPI_ClearRxFIFO)
-    SPI_DisableAutoSS                        0x00000875   Thumb Code    10  spi.o(i.SPI_DisableAutoSS)
-    SPI_Open                                 0x00000881   Thumb Code   262  spi.o(i.SPI_Open)
-    SYS_Init                                 0x0000099d   Thumb Code   124  main.o(i.SYS_Init)
-    SpiFlash_BlockErase64KB                  0x00000a45   Thumb Code    88  spi_transfer.o(i.SpiFlash_BlockErase64KB)
-    SpiFlash_NormalPageProgram               0x00000aa1   Thumb Code   110  spi_transfer.o(i.SpiFlash_NormalPageProgram)
-    SpiFlash_NormalRead                      0x00000b19   Thumb Code    96  spi_transfer.o(i.SpiFlash_NormalRead)
-    SpiFlash_ReadMidDid                      0x00000b81   Thumb Code    74  spi_transfer.o(i.SpiFlash_ReadMidDid)
-    SpiFlash_ReadStatusReg                   0x00000bd1   Thumb Code    46  spi_transfer.o(i.SpiFlash_ReadStatusReg)
-    SpiFlash_WaitReady                       0x00000c05   Thumb Code    14  spi_transfer.o(i.SpiFlash_WaitReady)
-    SystemCoreClockUpdate                    0x00000c15   Thumb Code   120  system_m031series.o(i.SystemCoreClockUpdate)
-    SystemInit                               0x00000ca9   Thumb Code    46  system_m031series.o(i.SystemInit)
-    UART0_Init                               0x00000ce1   Thumb Code    38  main.o(i.UART0_Init)
-    UART_Open                                0x00000d0d   Thumb Code   198  uart.o(i.UART_Open)
-    __0printf$5                              0x00000df1   Thumb Code    24  printf5.o(i.__0printf$5)
-    __1printf$5                              0x00000df1   Thumb Code     0  printf5.o(i.__0printf$5)
-    __2printf                                0x00000df1   Thumb Code     0  printf5.o(i.__0printf$5)
-    __scatterload_copy                       0x00000e11   Thumb Code    14  handlers.o(i.__scatterload_copy)
-    __scatterload_null                       0x00000e1f   Thumb Code     2  handlers.o(i.__scatterload_null)
-    __scatterload_zeroinit                   0x00000e21   Thumb Code    14  handlers.o(i.__scatterload_zeroinit)
-    fputc                                    0x00001105   Thumb Code    12  retarget.o(i.fputc)
-    main                                     0x00001111   Thumb Code    90  main.o(i.main)
-    gau32ClkSrcTbl                           0x00001258   Data          32  system_m031series.o(.constdata)
-    Region$$Table$$Base                      0x000012f8   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x00001318   Number         0  anon$$obj.o(Region$$Table)
+    I2C_SlaveTRx                             0x00000659   Thumb Code   282  i2c_transfer.o(i.I2C_SlaveTRx)
+    SPI0_Init                                0x000007f9   Thumb Code    48  spi_transfer.o(i.SPI0_Init)
+    SPI_ClearRxFIFO                          0x00000835   Thumb Code    12  spi.o(i.SPI_ClearRxFIFO)
+    SPI_DisableAutoSS                        0x00000841   Thumb Code    10  spi.o(i.SPI_DisableAutoSS)
+    SPI_Open                                 0x0000084d   Thumb Code   262  spi.o(i.SPI_Open)
+    SYS_Init                                 0x00000969   Thumb Code   124  main.o(i.SYS_Init)
+    SpiFlash_ChipErase                       0x00000a11   Thumb Code    70  spi_transfer.o(i.SpiFlash_ChipErase)
+    SpiFlash_NormalPageProgram               0x00000a5d   Thumb Code   110  spi_transfer.o(i.SpiFlash_NormalPageProgram)
+    SpiFlash_NormalRead                      0x00000ad5   Thumb Code    96  spi_transfer.o(i.SpiFlash_NormalRead)
+    SpiFlash_ReadMidDid                      0x00000b3d   Thumb Code    74  spi_transfer.o(i.SpiFlash_ReadMidDid)
+    SpiFlash_ReadStatusReg                   0x00000b8d   Thumb Code    46  spi_transfer.o(i.SpiFlash_ReadStatusReg)
+    SpiFlash_WaitReady                       0x00000bc1   Thumb Code    14  spi_transfer.o(i.SpiFlash_WaitReady)
+    SystemCoreClockUpdate                    0x00000bd1   Thumb Code   120  system_m031series.o(i.SystemCoreClockUpdate)
+    SystemInit                               0x00000c65   Thumb Code    46  system_m031series.o(i.SystemInit)
+    UART0_Init                               0x00000c9d   Thumb Code    38  main.o(i.UART0_Init)
+    UART_Open                                0x00000cc9   Thumb Code   198  uart.o(i.UART_Open)
+    __0printf$5                              0x00000dad   Thumb Code    24  printf5.o(i.__0printf$5)
+    __1printf$5                              0x00000dad   Thumb Code     0  printf5.o(i.__0printf$5)
+    __2printf                                0x00000dad   Thumb Code     0  printf5.o(i.__0printf$5)
+    __scatterload_copy                       0x00000dcd   Thumb Code    14  handlers.o(i.__scatterload_copy)
+    __scatterload_null                       0x00000ddb   Thumb Code     2  handlers.o(i.__scatterload_null)
+    __scatterload_zeroinit                   0x00000ddd   Thumb Code    14  handlers.o(i.__scatterload_zeroinit)
+    fputc                                    0x000010c1   Thumb Code    12  retarget.o(i.fputc)
+    main                                     0x000010cd   Thumb Code    88  main.o(i.main)
+    gau32ClkSrcTbl                           0x00001210   Data          32  system_m031series.o(.constdata)
+    Region$$Table$$Base                      0x000012b0   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x000012d0   Number         0  anon$$obj.o(Region$$Table)
     SystemCoreClock                          0x20000000   Data           4  system_m031series.o(.data)
     CyclesPerUs                              0x20000004   Data           4  system_m031series.o(.data)
     PllClock                                 0x20000008   Data           4  system_m031series.o(.data)
@@ -330,9 +330,9 @@ Memory Map of the image
 
   Image Entry point : 0x000000f5
 
-  Load Region LR_1 (Base: 0x00000000, Size: 0x00001344, Max: 0xffffffff, ABSOLUTE)
+  Load Region LR_1 (Base: 0x00000000, Size: 0x000012fc, Max: 0xffffffff, ABSOLUTE)
 
-    Execution Region ER_RO (Exec base: 0x00000000, Load base: 0x00000000, Size: 0x00001318, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Exec base: 0x00000000, Load base: 0x00000000, Size: 0x000012d0, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -375,55 +375,55 @@ Memory Map of the image
     0x000005cc   0x000005cc   0x00000024   Code   RO          747    i.I2C_GetBusClockFreq  i2c.o
     0x000005f0   0x000005f0   0x00000048   Code   RO          751    i.I2C_Open          i2c.o
     0x00000638   0x00000638   0x00000020   Code   RO          760    i.I2C_SetSlaveAddr  i2c.o
-    0x00000658   0x00000658   0x000001d4   Code   RO         1086    i.I2C_SlaveTRx      i2c_transfer.o
-    0x0000082c   0x0000082c   0x0000003c   Code   RO         1138    i.SPI0_Init         spi_transfer.o
-    0x00000868   0x00000868   0x0000000c   Code   RO          560    i.SPI_ClearRxFIFO   spi.o
-    0x00000874   0x00000874   0x0000000a   Code   RO          563    i.SPI_DisableAutoSS  spi.o
-    0x0000087e   0x0000087e   0x00000002   PAD
-    0x00000880   0x00000880   0x0000011c   Code   RO          570    i.SPI_Open          spi.o
-    0x0000099c   0x0000099c   0x00000088   Code   RO          935    i.SYS_Init          main.o
-    0x00000a24   0x00000a24   0x00000020   Code   RO          361    i.SendChar          retarget.o
-    0x00000a44   0x00000a44   0x0000005c   Code   RO         1140    i.SpiFlash_BlockErase64KB  spi_transfer.o
-    0x00000aa0   0x00000aa0   0x00000078   Code   RO         1142    i.SpiFlash_NormalPageProgram  spi_transfer.o
-    0x00000b18   0x00000b18   0x00000068   Code   RO         1143    i.SpiFlash_NormalRead  spi_transfer.o
-    0x00000b80   0x00000b80   0x00000050   Code   RO         1144    i.SpiFlash_ReadMidDid  spi_transfer.o
-    0x00000bd0   0x00000bd0   0x00000034   Code   RO         1145    i.SpiFlash_ReadStatusReg  spi_transfer.o
-    0x00000c04   0x00000c04   0x0000000e   Code   RO         1147    i.SpiFlash_WaitReady  spi_transfer.o
-    0x00000c12   0x00000c12   0x00000002   PAD
-    0x00000c14   0x00000c14   0x00000094   Code   RO            3    i.SystemCoreClockUpdate  system_m031series.o
-    0x00000ca8   0x00000ca8   0x00000038   Code   RO            4    i.SystemInit        system_m031series.o
-    0x00000ce0   0x00000ce0   0x0000002c   Code   RO          936    i.UART0_Init        main.o
-    0x00000d0c   0x00000d0c   0x000000e4   Code   RO          446    i.UART_Open         uart.o
-    0x00000df0   0x00000df0   0x00000020   Code   RO         1362    i.__0printf$5       mc_p.l(printf5.o)
-    0x00000e10   0x00000e10   0x0000000e   Code   RO         1533    i.__scatterload_copy  mc_p.l(handlers.o)
-    0x00000e1e   0x00000e1e   0x00000002   Code   RO         1534    i.__scatterload_null  mc_p.l(handlers.o)
-    0x00000e20   0x00000e20   0x0000000e   Code   RO         1535    i.__scatterload_zeroinit  mc_p.l(handlers.o)
-    0x00000e2e   0x00000e2e   0x00000002   PAD
-    0x00000e30   0x00000e30   0x000002d4   Code   RO         1369    i._printf_core      mc_p.l(printf5.o)
-    0x00001104   0x00001104   0x0000000c   Code   RO          365    i.fputc             retarget.o
-    0x00001110   0x00001110   0x000000a0   Code   RO          937    i.main              main.o
-    0x000011b0   0x000011b0   0x000000a8   Code   RO          367    i.stackDump         retarget.o
-    0x00001258   0x00001258   0x00000020   Data   RO            5    .constdata          system_m031series.o
-    0x00001278   0x00001278   0x00000038   Data   RO          220    .constdata          clk.o
-    0x000012b0   0x000012b0   0x00000048   Data   RO          454    .constdata          uart.o
-    0x000012f8   0x000012f8   0x00000020   Data   RO         1531    Region$$Table       anon$$obj.o
+    0x00000658   0x00000658   0x000001a0   Code   RO         1086    i.I2C_SlaveTRx      i2c_transfer.o
+    0x000007f8   0x000007f8   0x0000003c   Code   RO         1138    i.SPI0_Init         spi_transfer.o
+    0x00000834   0x00000834   0x0000000c   Code   RO          560    i.SPI_ClearRxFIFO   spi.o
+    0x00000840   0x00000840   0x0000000a   Code   RO          563    i.SPI_DisableAutoSS  spi.o
+    0x0000084a   0x0000084a   0x00000002   PAD
+    0x0000084c   0x0000084c   0x0000011c   Code   RO          570    i.SPI_Open          spi.o
+    0x00000968   0x00000968   0x00000088   Code   RO          935    i.SYS_Init          main.o
+    0x000009f0   0x000009f0   0x00000020   Code   RO          361    i.SendChar          retarget.o
+    0x00000a10   0x00000a10   0x0000004c   Code   RO         1141    i.SpiFlash_ChipErase  spi_transfer.o
+    0x00000a5c   0x00000a5c   0x00000078   Code   RO         1142    i.SpiFlash_NormalPageProgram  spi_transfer.o
+    0x00000ad4   0x00000ad4   0x00000068   Code   RO         1143    i.SpiFlash_NormalRead  spi_transfer.o
+    0x00000b3c   0x00000b3c   0x00000050   Code   RO         1144    i.SpiFlash_ReadMidDid  spi_transfer.o
+    0x00000b8c   0x00000b8c   0x00000034   Code   RO         1145    i.SpiFlash_ReadStatusReg  spi_transfer.o
+    0x00000bc0   0x00000bc0   0x0000000e   Code   RO         1147    i.SpiFlash_WaitReady  spi_transfer.o
+    0x00000bce   0x00000bce   0x00000002   PAD
+    0x00000bd0   0x00000bd0   0x00000094   Code   RO            3    i.SystemCoreClockUpdate  system_m031series.o
+    0x00000c64   0x00000c64   0x00000038   Code   RO            4    i.SystemInit        system_m031series.o
+    0x00000c9c   0x00000c9c   0x0000002c   Code   RO          936    i.UART0_Init        main.o
+    0x00000cc8   0x00000cc8   0x000000e4   Code   RO          446    i.UART_Open         uart.o
+    0x00000dac   0x00000dac   0x00000020   Code   RO         1362    i.__0printf$5       mc_p.l(printf5.o)
+    0x00000dcc   0x00000dcc   0x0000000e   Code   RO         1533    i.__scatterload_copy  mc_p.l(handlers.o)
+    0x00000dda   0x00000dda   0x00000002   Code   RO         1534    i.__scatterload_null  mc_p.l(handlers.o)
+    0x00000ddc   0x00000ddc   0x0000000e   Code   RO         1535    i.__scatterload_zeroinit  mc_p.l(handlers.o)
+    0x00000dea   0x00000dea   0x00000002   PAD
+    0x00000dec   0x00000dec   0x000002d4   Code   RO         1369    i._printf_core      mc_p.l(printf5.o)
+    0x000010c0   0x000010c0   0x0000000c   Code   RO          365    i.fputc             retarget.o
+    0x000010cc   0x000010cc   0x0000009c   Code   RO          937    i.main              main.o
+    0x00001168   0x00001168   0x000000a8   Code   RO          367    i.stackDump         retarget.o
+    0x00001210   0x00001210   0x00000020   Data   RO            5    .constdata          system_m031series.o
+    0x00001230   0x00001230   0x00000038   Data   RO          220    .constdata          clk.o
+    0x00001268   0x00001268   0x00000048   Data   RO          454    .constdata          uart.o
+    0x000012b0   0x000012b0   0x00000020   Data   RO         1531    Region$$Table       anon$$obj.o
 
 
-    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x00001318, Size: 0x0000002c, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x000012d0, Size: 0x0000002c, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x00001318   0x0000000c   Data   RW            6    .data               system_m031series.o
-    0x2000000c   0x00001324   0x00000004   Data   RW          368    .data               retarget.o
-    0x20000010   0x00001328   0x0000001b   Data   RW         1088    .data               i2c_transfer.o
+    0x20000000   0x000012d0   0x0000000c   Data   RW            6    .data               system_m031series.o
+    0x2000000c   0x000012dc   0x00000004   Data   RW          368    .data               retarget.o
+    0x20000010   0x000012e0   0x0000001b   Data   RW         1088    .data               i2c_transfer.o
 
 
-    Execution Region ER_ZI (Exec base: 0x2000002c, Load base: 0x00001344, Size: 0x00000404, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_ZI (Exec base: 0x2000002c, Load base: 0x000012fc, Size: 0x00000404, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x2000002c        -       0x00000200   Zero   RW         1087    .bss                i2c_transfer.o
-    0x2000022c   0x00001344   0x00000004   PAD
+    0x2000022c   0x000012fc   0x00000004   PAD
     0x20000230        -       0x00000200   Zero   RW          189    STACK               startup_m031series.o
 
 
@@ -437,17 +437,17 @@ Image component sizes
        364         58         56          0          0       4933   clk.o
         40          0          0          0          0       1063   gpio.o
        160         12          0          0          0       3491   i2c.o
-       612        212          0         27        512       9526   i2c_transfer.o
-       340         88          0          0          0      33939   main.o
+       560        182          0         27        512       9526   i2c_transfer.o
+       336         86          0          0          0      33939   main.o
        280        132          0          4          0       4851   retarget.o
        478         54          0          0          0       4161   spi.o
-       522         46          0          0          0       4089   spi_transfer.o
+       506         48          0          0          0       4012   spi_transfer.o
         92         42        192          0        512        744   startup_m031series.o
        204         38         32         12          0      85999   system_m031series.o
        316         48         72          0          0       2220   uart.o
 
     ----------------------------------------------------------------------
-      3412        730        384         44       1028     155016   Object Totals
+      3340        700        384         44       1028     154939   Object Totals
          0          0         32          0          0          0   (incl. Generated)
          4          0          0          1          4          0   (incl. Padding)
 
@@ -493,15 +493,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      4504        798        384         44       1028     153812   Grand Totals
-      4504        798        384         44       1028     153812   ELF Image Totals
-      4504        798        384         44          0          0   ROM Totals
+      4432        768        384         44       1028     153735   Grand Totals
+      4432        768        384         44       1028     153735   ELF Image Totals
+      4432        768        384         44          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 4888 (   4.77kB)
+    Total RO  Size (Code + RO Data)                 4816 (   4.70kB)
     Total RW  Size (RW Data + ZI Data)              1072 (   1.05kB)
-    Total ROM Size (Code + RO Data + RW Data)       4932 (   4.82kB)
+    Total ROM Size (Code + RO Data + RW Data)       4860 (   4.75kB)
 
 ==============================================================================
 

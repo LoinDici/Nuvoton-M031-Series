@@ -27666,26 +27666,27 @@ N				read_write_flag = g_au8SlvRxData[0];
 N				flash_addr = (g_au8SlvRxData[1] << 16) + (g_au8SlvRxData[2] << 8) + (g_au8SlvRxData[3]);
 N				slave_buff_addr = (g_au8SlvRxData[4] << 16) + (g_au8SlvRxData[5] << 8) + (g_au8SlvRxData[6]);
 N
-N				if (g_u8SlvDataLen == 4)
-N					printf("flash addr:%d\n", flash_addr);
-N				if (g_u8SlvDataLen == 7)
-N					printf("slave_buff_addr:%d\n", slave_buff_addr);
+N//				if (g_u8SlvDataLen == 4)
+N//					printf("flash addr:%d\n", flash_addr);
+N//				if (g_u8SlvDataLen == 7)
+N//					printf("slave_buff_addr:%d\n", slave_buff_addr);
 N
 N			  if (g_u8SlvDataLen == 7 && read_write_flag == 0xff) {
 N					printf("Normal read...");
 N					/* page read */
 N					SpiFlash_NormalRead(flash_addr, slave_buff_addr);
 N					SpiFlash_WaitReady();
-N	//				printf("OK\n");
+N					printf("OK\n");
 N					}
 N			}	else {
 N//				printf("u32Count:%d\n", u32Count);
 N				g_au8SlvData[u32Count++] = u8data;
 N				if (u32Count == slave_buff_addr) {
-N						printf("Start to normal write data to Flash ...");
-N						SpiFlash_NormalPageProgram(flash_addr, slave_buff_addr);
-N						SpiFlash_WaitReady();
+N					printf("Start to normal write data to Flash ...");
+N					SpiFlash_NormalPageProgram(flash_addr, slave_buff_addr);
+N					SpiFlash_WaitReady();
 N					u32Count = 0;
+N					printf("OK\n");
 N				} else if (u32Count > slave_buff_addr) {
 N					printf("Error not left space\n");
 N					u32Count = 0;

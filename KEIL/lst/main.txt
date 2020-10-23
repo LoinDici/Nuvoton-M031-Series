@@ -183,12 +183,12 @@
 ;;;81     	GPIO_SetMode(PB, (BIT2 | BIT3), GPIO_MODE_OUTPUT); 
 00000c  2201              MOVS     r2,#1
 00000e  210c              MOVS     r1,#0xc
-000010  4812              LDR      r0,|L3.92|
+000010  4811              LDR      r0,|L3.88|
 000012  f7fffffe          BL       GPIO_SetMode
 ;;;82     		
 ;;;83     	/* Set WP# and HOLD# of SPI Flash to high */ 
 ;;;84     	PB2 = 1;
-000016  4812              LDR      r0,|L3.96|
+000016  4811              LDR      r0,|L3.92|
 000018  2101              MOVS     r1,#1
 00001a  6081              STR      r1,[r0,#8]
 ;;;85     	PB3 = 1;
@@ -200,7 +200,7 @@
 ;;;89     
 ;;;90       /* I2C enter no address SLV mode */
 ;;;91       I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
-000022  4910              LDR      r1,|L3.100|
+000022  490f              LDR      r1,|L3.96|
 000024  6808              LDR      r0,[r1,#0]
 000026  223c              MOVS     r2,#0x3c
 000028  4390              BICS     r0,r0,r2
@@ -210,12 +210,12 @@
 ;;;93     	/* Check ID of SPI Flash */
 ;;;94     	if((u16ID = SpiFlash_ReadMidDid()) != SPI_FALSH_ID) {
 00002e  f7fffffe          BL       SpiFlash_ReadMidDid
-000032  490d              LDR      r1,|L3.104|
+000032  490c              LDR      r1,|L3.100|
 000034  4288              CMP      r0,r1
 000036  d004              BEQ      |L3.66|
 ;;;95     		printf("Wrong ID, 0x%x\n", u16ID);
 000038  4601              MOV      r1,r0
-00003a  a00c              ADR      r0,|L3.108|
+00003a  a00b              ADR      r0,|L3.104|
 00003c  f7fffffe          BL       __2printf
                   |L3.64|
 ;;;96     		while(1);
@@ -223,59 +223,67 @@
                   |L3.66|
 ;;;97     	} else
 ;;;98     		printf("Flash found: W25Q32 ...\n");
-000042  a00e              ADR      r0,|L3.124|
+000042  a00d              ADR      r0,|L3.120|
 000044  f7fffffe          BL       __2printf
-;;;99     	
-;;;100    	/* Erase SPI flash */
-;;;101      SpiFlash_BlockErase64KB(0);
-000048  2000              MOVS     r0,#0
-00004a  f7fffffe          BL       SpiFlash_BlockErase64KB
-;;;102    
-;;;103    	/* Wait ready */
-;;;104    	SpiFlash_WaitReady();
-00004e  f7fffffe          BL       SpiFlash_WaitReady
-;;;105    
-;;;106    	printf("[OK]\n");
-000052  a011              ADR      r0,|L3.152|
-000054  f7fffffe          BL       __2printf
-                  |L3.88|
-;;;107    
-;;;108        while(1)
-000058  e7fe              B        |L3.88|
-;;;109    			;
-;;;110    }
+;;;99     #if 0
+;;;100    	{
+;;;101    		uint32_t addr;
+;;;102    	/* Erase SPI flash */
+;;;103    		for (addr = 0; addr <= 0x800000; ) {
+;;;104    			SpiFlash_BlockErase64KB(addr);
+;;;105    			addr += 0x10000;
+;;;106    			printf("addr:%x\n", addr);
+;;;107    		}
+;;;108    	}
+;;;109    #else
+;;;110    	SpiFlash_ChipErase();	
+000048  f7fffffe          BL       SpiFlash_ChipErase
+;;;111    #endif
+;;;112    
+;;;113    	/* Wait ready */
+;;;114    	SpiFlash_WaitReady();
+00004c  f7fffffe          BL       SpiFlash_WaitReady
+;;;115    
+;;;116    	printf("[OK]\n");
+000050  a010              ADR      r0,|L3.148|
+000052  f7fffffe          BL       __2printf
+                  |L3.86|
+;;;117    
+;;;118        while(1)
+000056  e7fe              B        |L3.86|
+;;;119    			;
+;;;120    }
                           ENDP
 
-00005a  0000              DCW      0x0000
-                  |L3.92|
+                  |L3.88|
                           DCD      0x40004040
-                  |L3.96|
+                  |L3.92|
                           DCD      0x40004840
-                  |L3.100|
+                  |L3.96|
                           DCD      0x40080000
-                  |L3.104|
+                  |L3.100|
                           DCD      0x0000ef16
-                  |L3.108|
-00006c  57726f6e          DCB      "Wrong ID, 0x%x\n",0
-000070  67204944
-000074  2c203078
-000078  25780a00
-                  |L3.124|
-00007c  466c6173          DCB      "Flash found: W25Q32 ...\n",0
-000080  6820666f
-000084  756e643a
-000088  20573235
-00008c  51333220
-000090  2e2e2e0a
-000094  00      
-000095  00                DCB      0
-000096  00                DCB      0
-000097  00                DCB      0
-                  |L3.152|
-000098  5b4f4b5d          DCB      "[OK]\n",0
-00009c  0a00    
-00009e  00                DCB      0
-00009f  00                DCB      0
+                  |L3.104|
+000068  57726f6e          DCB      "Wrong ID, 0x%x\n",0
+00006c  67204944
+000070  2c203078
+000074  25780a00
+                  |L3.120|
+000078  466c6173          DCB      "Flash found: W25Q32 ...\n",0
+00007c  6820666f
+000080  756e643a
+000084  20573235
+000088  51333220
+00008c  2e2e2e0a
+000090  00      
+000091  00                DCB      0
+000092  00                DCB      0
+000093  00                DCB      0
+                  |L3.148|
+000094  5b4f4b5d          DCB      "[OK]\n",0
+000098  0a00    
+00009a  00                DCB      0
+00009b  00                DCB      0
 
 ;*** Start embedded assembler ***
 

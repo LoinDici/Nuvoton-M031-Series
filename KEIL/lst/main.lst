@@ -27691,9 +27691,19 @@ N		printf("Wrong ID, 0x%x\n", u16ID);
 N		while(1);
 N	} else
 N		printf("Flash found: W25Q32 ...\n");
-N	
-N	/* Erase SPI flash */
-N  SpiFlash_BlockErase64KB(0);
+N#if 0
+S	{
+S		uint32_t addr;
+S	/* Erase SPI flash */
+S		for (addr = 0; addr <= 0x800000; ) {
+S			SpiFlash_BlockErase64KB(addr);
+S			addr += 0x10000;
+S			printf("addr:%x\n", addr);
+S		}
+S	}
+N#else
+N	SpiFlash_ChipErase();	
+N#endif
 N
 N	/* Wait ready */
 N	SpiFlash_WaitReady();
