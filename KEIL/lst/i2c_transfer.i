@@ -24424,9 +24424,11 @@ typedef struct {
  
  
 volatile uint32_t slave_buff_addr;
+volatile uint32_t flash_addr;
+volatile uint8_t read_write_flag;
 volatile uint8_t g_au8SlvData[256];
-uint8_t g_u8CompareData[256];
-volatile uint8_t g_au8SlvRxData[3];
+volatile uint8_t g_u8SlvTxData[256];
+volatile uint8_t g_au8SlvRxData[7];
 
 volatile uint8_t g_u8DeviceAddr;
 volatile uint8_t g_u8SlvDataLen;
@@ -24455,24 +24457,21 @@ void I2C0_IRQHandler(void)
     }
 }
 
-void I2C_Rx_Write_To_SPI(uint32_t u32DataSize)
+void I2C_Rx_Write_To_SPI(uint32_t u32DataSize, uint32_t u32FlashAddress)
 {
-	static	uint32_t u32FlashAddress = 0;
-	
-	printf("Start to normal write data to Flash ...");	
-	 
-	SpiFlash_NormalPageProgram(u32FlashAddress, u32DataSize);
-	SpiFlash_WaitReady();
-	printf("[OK]\n");
 
-	printf("Normal read...");
+	 
+
+
+
+
 		 
-	SpiFlash_NormalRead(u32FlashAddress, u32DataSize);
-	printf("OK\n");
+
+
 	
-	Compare(u32DataSize);
-	u32FlashAddress += u32DataSize;
-	printf("u32FlashAddress:%d\n", u32FlashAddress);
+
+
+
 }
 
  
@@ -24492,15 +24491,31 @@ void I2C_SlaveTRx(uint32_t u32Status)
 		case 0x80:	 
 			u8data = (unsigned char) ((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->DAT);
 
-			if (g_u8SlvDataLen < 3) {
+			if (g_u8SlvDataLen < 7) {
 				g_au8SlvRxData[g_u8SlvDataLen++] = u8data;
-				slave_buff_addr = (g_au8SlvRxData[0] << 16) + (g_au8SlvRxData[1] << 8) + (g_au8SlvRxData[2]);
-				printf("slave_buff_addr:%d\n", slave_buff_addr);
-			} else {
+				read_write_flag = g_au8SlvRxData[0];
+				flash_addr = (g_au8SlvRxData[1] << 16) + (g_au8SlvRxData[2] << 8) + (g_au8SlvRxData[3]);
+				slave_buff_addr = (g_au8SlvRxData[4] << 16) + (g_au8SlvRxData[5] << 8) + (g_au8SlvRxData[6]);
+
+				if (g_u8SlvDataLen == 4)
+					printf("flash addr:%d\n", flash_addr);
+				if (g_u8SlvDataLen == 7)
+					printf("slave_buff_addr:%d\n", slave_buff_addr);
+
+			  if (g_u8SlvDataLen == 7 && read_write_flag == 0xff) {
+					printf("Normal read...");
+					 
+					SpiFlash_NormalRead(flash_addr, slave_buff_addr);
+					SpiFlash_WaitReady();
+	
+					}
+			}	else {
 
 				g_au8SlvData[u32Count++] = u8data;
 				if (u32Count == slave_buff_addr) {
-					I2C_Rx_Write_To_SPI(slave_buff_addr);
+						printf("Start to normal write data to Flash ...");
+						SpiFlash_NormalPageProgram(flash_addr, slave_buff_addr);
+						SpiFlash_WaitReady();
 					u32Count = 0;
 				} else if (u32Count > slave_buff_addr) {
 					printf("Error not left space\n");
@@ -24510,21 +24525,22 @@ void I2C_SlaveTRx(uint32_t u32Status)
 			((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->CTL0 = ((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->CTL0 & ~0x3C) | (0x0CUL));
 		break;
 		case 0xA8:	 
+			  SpiFlash_WaitReady();
 				u8data = (unsigned char)((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->DAT);
-				printf("ststus 0xa8 get data:%d\n", u8data);
 				slave_buff_addr = 0;
 				
 				((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->DAT = (slave_buff_addr));
-				((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->DAT = (g_u8CompareData[slave_buff_addr]));
+				((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->DAT = (g_u8SlvTxData[slave_buff_addr]));
         slave_buff_addr++;
         ((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->CTL0 = ((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->CTL0 & ~0x3C) | (0x0CUL));
 		break;
 		case 0xB8:	 
-			((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->DAT = (g_u8CompareData[slave_buff_addr++]));
+			SpiFlash_WaitReady();
+			((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->DAT = (g_u8SlvTxData[slave_buff_addr++]));
       ((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->CTL0 = ((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->CTL0 & ~0x3C) | (0x0CUL));
 		break;
 		case 0xC0:	 
-			((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->DAT = (g_u8CompareData[slave_buff_addr++]));
+			((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->DAT = (g_u8SlvTxData[slave_buff_addr++]));
 			slave_buff_addr = 0;
       ((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->CTL0 = ((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->CTL0 & ~0x3C) | (0x0CUL));
 		break;
@@ -24555,7 +24571,7 @@ void I2C0_Init(void)
 
      
     I2C_SetSlaveAddr(((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)), 0, 0x15, 0);    
-#line 153 "..\\i2c_transfer.c"
+#line 169 "..\\i2c_transfer.c"
      
     I2C_EnableInt(((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)));
     NVIC_EnableIRQ(I2C0_IRQn);

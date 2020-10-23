@@ -27700,25 +27700,6 @@ N	SpiFlash_WaitReady();
 N
 N	printf("[OK]\n");
 N
-N	/*Write SPI INFO
-N	w25q64.device_id[0] = 0xEF;
-N	w25q64.device_id[1] = 0x16;
-N	w25q64.version = 0x00;
-N	w25q64.date[0] = 0x14;
-N	w25q64.date[1] = 0x2F;
-N	w25q64.date[2] = 0x0a;
-N	w25q64.date[3] = 0x2f;
-N	w25q64.date[4] = 0x13;
-N	w25q64.calibra_data_start[0] =0x00;
-N	w25q64.calibra_data_start[1] = 0x00;
-N	w25q64.calibra_data_start[2] = 0x08;
-N	w25q64.calibra_data_end[0] = 0x10;
-N	w25q64.calibra_data_end[1] = 0x00;
-N	w25q64.calibra_data_end[2] = 0x00;
-N	
-N	w25q64.calibra_data = malloc(w25q64.calibra_data_end[0] << 16 | w25q64.calibra_data_end);
-N	*/
-N
 N    while(1)
 N			;
 N}

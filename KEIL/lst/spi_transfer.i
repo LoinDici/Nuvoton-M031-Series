@@ -24421,7 +24421,7 @@ typedef struct {
 #line 7 "..\\spi_transfer.c"
 
 extern uint8_t g_au8SlvData[256];
-extern uint8_t g_u8CompareData[256];
+extern uint8_t g_u8SlvTxData[256];
 
 void SPI0_Init(void)
 {
@@ -24750,7 +24750,7 @@ void SpiFlash_NormalRead(uint32_t StartAddress, uint32_t u32DataSize)
         ((((SPI_T *) ((( uint32_t)0x40000000) + 0x61000)))->TX = (0x00));
         while(( ((((SPI_T *) ((( uint32_t)0x40000000) + 0x61000)))->STATUS & (0x1ul << (0)))>>(0) ))
 					;
-        g_u8CompareData[i] = ((((SPI_T *) ((( uint32_t)0x40000000) + 0x61000)))->RX);
+        g_u8SlvTxData[i] = ((((SPI_T *) ((( uint32_t)0x40000000) + 0x61000)))->RX);
 
     }
 
@@ -24767,13 +24767,10 @@ void Compare(uint32_t u32DataSize)
 	uint32_t u32ByteCount;
 	uint32_t nError = 0;
 	
-	printf("Compare...");
+
 	for(u32ByteCount = 0; u32ByteCount < u32DataSize; u32ByteCount++) {
-		if(g_u8CompareData[u32ByteCount] != g_au8SlvData[u32ByteCount])
+		if(g_u8SlvTxData[u32ByteCount] != g_au8SlvData[u32ByteCount])
 			nError ++;
 	}
-	if(nError == 0)
-		printf("[OK]\n");
-	else
-		printf("[FAIL]\n");
+#line 366 "..\\spi_transfer.c"
 }

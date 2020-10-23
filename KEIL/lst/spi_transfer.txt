@@ -7,68 +7,40 @@
                   Compare PROC
 ;;;349    
 ;;;350    void Compare(uint32_t u32DataSize)
-000000  b570              PUSH     {r4-r6,lr}
+000000  b530              PUSH     {r4,r5,lr}
 ;;;351    {
-000002  4605              MOV      r5,r0
 ;;;352    	uint32_t u32ByteCount;
 ;;;353    	uint32_t nError = 0;
-000004  2400              MOVS     r4,#0
 ;;;354    	
-;;;355    	printf("Compare...");
-000006  a00b              ADR      r0,|L1.52|
-000008  f7fffffe          BL       __2printf
+;;;355    //	printf("Compare...");
 ;;;356    	for(u32ByteCount = 0; u32ByteCount < u32DataSize; u32ByteCount++) {
-00000c  2100              MOVS     r1,#0
-;;;357    		if(g_u8CompareData[u32ByteCount] != g_au8SlvData[u32ByteCount])
-00000e  480c              LDR      r0,|L1.64|
-000010  4a0c              LDR      r2,|L1.68|
-000012  e005              B        |L1.32|
-                  |L1.20|
-000014  5c43              LDRB     r3,[r0,r1]
-000016  5c56              LDRB     r6,[r2,r1]
-000018  42b3              CMP      r3,r6
-00001a  d000              BEQ      |L1.30|
-00001c  1c64              ADDS     r4,r4,#1
-                  |L1.30|
-00001e  1c49              ADDS     r1,r1,#1
-                  |L1.32|
-000020  42a9              CMP      r1,r5                 ;356
-000022  d3f7              BCC      |L1.20|
+000002  2100              MOVS     r1,#0
+;;;357    		if(g_u8SlvTxData[u32ByteCount] != g_au8SlvData[u32ByteCount])
+000004  4b03              LDR      r3,|L1.20|
+000006  4a04              LDR      r2,|L1.24|
+000008  e000              B        |L1.12|
+                  |L1.10|
+00000a  1c49              ADDS     r1,r1,#1              ;351
+                  |L1.12|
+00000c  4281              CMP      r1,r0                 ;356
+00000e  d3fc              BCC      |L1.10|
 ;;;358    			nError ++;
 ;;;359    	}
-;;;360    	if(nError == 0)
-000024  2c00              CMP      r4,#0
-000026  d003              BEQ      |L1.48|
-;;;361    		printf("[OK]\n");
-;;;362    	else
-;;;363    		printf("[FAIL]\n");
-000028  a007              ADR      r0,|L1.72|
-                  |L1.42|
-00002a  f7fffffe          BL       __2printf
-;;;364    }
-00002e  bd70              POP      {r4-r6,pc}
-                  |L1.48|
-000030  a007              ADR      r0,|L1.80|
-000032  e7fa              B        |L1.42|
+;;;360    #if 0
+;;;361    	if(nError == 0)
+;;;362    		printf("[OK]\n");
+;;;363    	else
+;;;364    		printf("[FAIL]\n");
+;;;365    #endif
+;;;366    }
+000010  bd30              POP      {r4,r5,pc}
                           ENDP
 
-                  |L1.52|
-000034  436f6d70          DCB      "Compare...",0
-000038  6172652e
-00003c  2e2e00  
-00003f  00                DCB      0
-                  |L1.64|
-                          DCD      g_u8CompareData
-                  |L1.68|
+000012  0000              DCW      0x0000
+                  |L1.20|
+                          DCD      g_u8SlvTxData
+                  |L1.24|
                           DCD      g_au8SlvData
-                  |L1.72|
-000048  5b464149          DCB      "[FAIL]\n",0
-00004c  4c5d0a00
-                  |L1.80|
-000050  5b4f4b5d          DCB      "[OK]\n",0
-000054  0a00    
-000056  00                DCB      0
-000057  00                DCB      0
 
                           AREA ||i.SPI0_Init||, CODE, READONLY, ALIGN=2
 
@@ -552,7 +524,7 @@
 ;;;335            SPI_WRITE_TX(SPI_FLASH_PORT, 0x00);
 ;;;336            while(SPI_IS_BUSY(SPI_FLASH_PORT))
 ;;;337    					;
-;;;338            g_u8CompareData[i] = SPI_READ_RX(SPI_FLASH_PORT);
+;;;338            g_u8SlvTxData[i] = SPI_READ_RX(SPI_FLASH_PORT);
 000036  4e0b              LDR      r6,|L7.100|
 000038  e006              B        |L7.72|
                   |L7.58|
@@ -568,7 +540,7 @@
 000048  42aa              CMP      r2,r5                 ;333
 00004a  d3f6              BCC      |L7.58|
                   |L7.76|
-;;;339    //				printf("read data:%d from spi\n", g_u8CompareData[i]);
+;;;339    //				printf("read data:%d from spi\n", g_u8SlvTxData[i]);
 ;;;340        }
 ;;;341    
 ;;;342        // wait tx finish
@@ -594,7 +566,7 @@
                   |L7.96|
                           DCD      0x40061000
                   |L7.100|
-                          DCD      g_u8CompareData
+                          DCD      g_u8SlvTxData
 
                           AREA ||i.SpiFlash_ReadMidDid||, CODE, READONLY, ALIGN=2
 

@@ -105,25 +105,6 @@ int main(void)
 
 	printf("[OK]\n");
 
-	/*Write SPI INFO
-	w25q64.device_id[0] = 0xEF;
-	w25q64.device_id[1] = 0x16;
-	w25q64.version = 0x00;
-	w25q64.date[0] = 0x14;
-	w25q64.date[1] = 0x2F;
-	w25q64.date[2] = 0x0a;
-	w25q64.date[3] = 0x2f;
-	w25q64.date[4] = 0x13;
-	w25q64.calibra_data_start[0] =0x00;
-	w25q64.calibra_data_start[1] = 0x00;
-	w25q64.calibra_data_start[2] = 0x08;
-	w25q64.calibra_data_end[0] = 0x10;
-	w25q64.calibra_data_end[1] = 0x00;
-	w25q64.calibra_data_end[2] = 0x00;
-	
-	w25q64.calibra_data = malloc(w25q64.calibra_data_end[0] << 16 | w25q64.calibra_data_end);
-	*/
-
     while(1)
 			;
 }

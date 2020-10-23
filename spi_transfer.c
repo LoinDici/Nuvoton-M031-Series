@@ -6,7 +6,7 @@
 #include "spi_transfer.h"
 
 extern uint8_t g_au8SlvData[PAGE_LENGTH];
-extern uint8_t g_u8CompareData[PAGE_LENGTH];
+extern uint8_t g_u8SlvTxData[PAGE_LENGTH];
 
 void SPI0_Init(void)
 {
@@ -335,8 +335,8 @@ void SpiFlash_NormalRead(uint32_t StartAddress, uint32_t u32DataSize)
         SPI_WRITE_TX(SPI_FLASH_PORT, 0x00);
         while(SPI_IS_BUSY(SPI_FLASH_PORT))
 					;
-        g_u8CompareData[i] = SPI_READ_RX(SPI_FLASH_PORT);
-//				printf("read data:%d from spi\n", g_u8CompareData[i]);
+        g_u8SlvTxData[i] = SPI_READ_RX(SPI_FLASH_PORT);
+//				printf("read data:%d from spi\n", g_u8SlvTxData[i]);
     }
 
     // wait tx finish
@@ -352,13 +352,15 @@ void Compare(uint32_t u32DataSize)
 	uint32_t u32ByteCount;
 	uint32_t nError = 0;
 	
-	printf("Compare...");
+//	printf("Compare...");
 	for(u32ByteCount = 0; u32ByteCount < u32DataSize; u32ByteCount++) {
-		if(g_u8CompareData[u32ByteCount] != g_au8SlvData[u32ByteCount])
+		if(g_u8SlvTxData[u32ByteCount] != g_au8SlvData[u32ByteCount])
 			nError ++;
 	}
+#if 0
 	if(nError == 0)
 		printf("[OK]\n");
 	else
 		printf("[FAIL]\n");
+#endif
 }

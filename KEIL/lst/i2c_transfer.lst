@@ -27584,11 +27584,13 @@ N/*-----------------------------------------------------------------------------
 N/* Global variables                                                                                        */
 N/*---------------------------------------------------------------------------------------------------------*/
 Nvolatile uint32_t slave_buff_addr;
+Nvolatile uint32_t flash_addr;
+Nvolatile uint8_t read_write_flag;
 Nvolatile uint8_t g_au8SlvData[PAGE_LENGTH];
 Xvolatile uint8_t g_au8SlvData[256];
-Nuint8_t g_u8CompareData[PAGE_LENGTH];
-Xuint8_t g_u8CompareData[256];
-Nvolatile uint8_t g_au8SlvRxData[3];
+Nvolatile uint8_t g_u8SlvTxData[PAGE_LENGTH];
+Xvolatile uint8_t g_u8SlvTxData[256];
+Nvolatile uint8_t g_au8SlvRxData[7];
 N
 Nvolatile uint8_t g_u8DeviceAddr;
 Nvolatile uint8_t g_u8SlvDataLen;
@@ -27622,24 +27624,21 @@ N            s_I2C0HandlerFn(u32Status);
 N    }
 N}
 N
-Nvoid I2C_Rx_Write_To_SPI(uint32_t u32DataSize)
+Nvoid I2C_Rx_Write_To_SPI(uint32_t u32DataSize, uint32_t u32FlashAddress)
 N{
-N	static	uint32_t u32FlashAddress = 0;
-N	
-N	printf("Start to normal write data to Flash ...");	
+N//	printf("Start to normal write data to Flash ...");	
 N	/* page program */
-N	SpiFlash_NormalPageProgram(u32FlashAddress, u32DataSize);
-N	SpiFlash_WaitReady();
-N	printf("[OK]\n");
 N
-N	printf("Normal read...");
+N//	printf("[OK]\n");
+N
+N//	printf("Normal read...");
 N		/* page read */
-N	SpiFlash_NormalRead(u32FlashAddress, u32DataSize);
-N	printf("OK\n");
+N//	SpiFlash_NormalRead(u32FlashAddress, u32DataSize);
+N//	printf("OK\n");
 N	
-N	Compare(u32DataSize);
-N	u32FlashAddress += u32DataSize;
-N	printf("u32FlashAddress:%d\n", u32FlashAddress);
+N//	Compare(u32DataSize);
+N
+N//	printf("u32FlashAddress:%d\n", u32FlashAddress);
 N}
 N
 N/*---------------------------------------------------------------------------------------------------------*/
@@ -27661,15 +27660,31 @@ N		case 0x80:	/* Previously address with own SLA address Data has been received;
 N			u8data = (unsigned char) I2C_GET_DATA(I2C0);
 X			u8data = (unsigned char) ((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->DAT);
 N//			printf("g_u8SlvDataLen:%d\n", g_u8SlvDataLen);
-N			if (g_u8SlvDataLen < 3) {
+N			if (g_u8SlvDataLen < 7) {
 N				g_au8SlvRxData[g_u8SlvDataLen++] = u8data;
-N				slave_buff_addr = (g_au8SlvRxData[0] << 16) + (g_au8SlvRxData[1] << 8) + (g_au8SlvRxData[2]);
-N				printf("slave_buff_addr:%d\n", slave_buff_addr);
-N			} else {
+N				read_write_flag = g_au8SlvRxData[0];
+N				flash_addr = (g_au8SlvRxData[1] << 16) + (g_au8SlvRxData[2] << 8) + (g_au8SlvRxData[3]);
+N				slave_buff_addr = (g_au8SlvRxData[4] << 16) + (g_au8SlvRxData[5] << 8) + (g_au8SlvRxData[6]);
+N
+N				if (g_u8SlvDataLen == 4)
+N					printf("flash addr:%d\n", flash_addr);
+N				if (g_u8SlvDataLen == 7)
+N					printf("slave_buff_addr:%d\n", slave_buff_addr);
+N
+N			  if (g_u8SlvDataLen == 7 && read_write_flag == 0xff) {
+N					printf("Normal read...");
+N					/* page read */
+N					SpiFlash_NormalRead(flash_addr, slave_buff_addr);
+N					SpiFlash_WaitReady();
+N	//				printf("OK\n");
+N					}
+N			}	else {
 N//				printf("u32Count:%d\n", u32Count);
 N				g_au8SlvData[u32Count++] = u8data;
 N				if (u32Count == slave_buff_addr) {
-N					I2C_Rx_Write_To_SPI(slave_buff_addr);
+N						printf("Start to normal write data to Flash ...");
+N						SpiFlash_NormalPageProgram(flash_addr, slave_buff_addr);
+N						SpiFlash_WaitReady();
 N					u32Count = 0;
 N				} else if (u32Count > slave_buff_addr) {
 N					printf("Error not left space\n");
@@ -27680,28 +27695,29 @@ N			I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
 X			((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->CTL0 = ((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->CTL0 & ~0x3C) | (0x0CUL));
 N		break;
 N		case 0xA8:	/* Own SLA+R has been receive; ACK has been return */
+N			  SpiFlash_WaitReady();
 N				u8data = (unsigned char)I2C_GET_DATA(I2C0);
 X				u8data = (unsigned char)((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->DAT);
-N				printf("ststus 0xa8 get data:%d\n", u8data);
 N				slave_buff_addr = 0;
 N				//printf("send data:%x\n", g_au8SlvData[slave_buff_addr]);
 N				I2C_SET_DATA(I2C0, slave_buff_addr);
 X				((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->DAT = (slave_buff_addr));
-N				I2C_SET_DATA(I2C0, g_u8CompareData[slave_buff_addr]);
-X				((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->DAT = (g_u8CompareData[slave_buff_addr]));
+N				I2C_SET_DATA(I2C0, g_u8SlvTxData[slave_buff_addr]);
+X				((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->DAT = (g_u8SlvTxData[slave_buff_addr]));
 N        slave_buff_addr++;
 N        I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
 X        ((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->CTL0 = ((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->CTL0 & ~0x3C) | (0x0CUL));
 N		break;
 N		case 0xB8:	/* Data byte in I2CDAT has been transmitted ACK has been received */
-N			I2C_SET_DATA(I2C0, g_u8CompareData[slave_buff_addr++]);
-X			((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->DAT = (g_u8CompareData[slave_buff_addr++]));
+N			SpiFlash_WaitReady();
+N			I2C_SET_DATA(I2C0, g_u8SlvTxData[slave_buff_addr++]);
+X			((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->DAT = (g_u8SlvTxData[slave_buff_addr++]));
 N      I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
 X      ((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->CTL0 = ((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->CTL0 & ~0x3C) | (0x0CUL));
 N		break;
 N		case 0xC0:	/* Data byte or last data in I2CDAT has been transmitted Not ACK has been received */
-N			I2C_SET_DATA(I2C0, g_u8CompareData[slave_buff_addr++]);
-X			((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->DAT = (g_u8CompareData[slave_buff_addr++]));
+N			I2C_SET_DATA(I2C0, g_u8SlvTxData[slave_buff_addr++]);
+X			((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->DAT = (g_u8SlvTxData[slave_buff_addr++]));
 N			slave_buff_addr = 0;
 N      I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
 X      ((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->CTL0 = ((((I2C_T *) ((( uint32_t)0x40000000) + 0x80000)))->CTL0 & ~0x3C) | (0x0CUL));

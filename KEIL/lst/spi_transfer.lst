@@ -27582,8 +27582,8 @@ L 7 "..\spi_transfer.c" 2
 N
 Nextern uint8_t g_au8SlvData[PAGE_LENGTH];
 Xextern uint8_t g_au8SlvData[256];
-Nextern uint8_t g_u8CompareData[PAGE_LENGTH];
-Xextern uint8_t g_u8CompareData[256];
+Nextern uint8_t g_u8SlvTxData[PAGE_LENGTH];
+Xextern uint8_t g_u8SlvTxData[256];
 N
 Nvoid SPI0_Init(void)
 N{
@@ -28011,9 +28011,9 @@ X        ((((SPI_T *) ((( uint32_t)0x40000000) + 0x61000)))->TX = (0x00));
 N        while(SPI_IS_BUSY(SPI_FLASH_PORT))
 X        while(( ((((SPI_T *) ((( uint32_t)0x40000000) + 0x61000)))->STATUS & (0x1ul << (0)))>>(0) ))
 N					;
-N        g_u8CompareData[i] = SPI_READ_RX(SPI_FLASH_PORT);
-X        g_u8CompareData[i] = ((((SPI_T *) ((( uint32_t)0x40000000) + 0x61000)))->RX);
-N//				printf("read data:%d from spi\n", g_u8CompareData[i]);
+N        g_u8SlvTxData[i] = SPI_READ_RX(SPI_FLASH_PORT);
+X        g_u8SlvTxData[i] = ((((SPI_T *) ((( uint32_t)0x40000000) + 0x61000)))->RX);
+N//				printf("read data:%d from spi\n", g_u8SlvTxData[i]);
 N    }
 N
 N    // wait tx finish
@@ -28031,13 +28031,15 @@ N{
 N	uint32_t u32ByteCount;
 N	uint32_t nError = 0;
 N	
-N	printf("Compare...");
+N//	printf("Compare...");
 N	for(u32ByteCount = 0; u32ByteCount < u32DataSize; u32ByteCount++) {
-N		if(g_u8CompareData[u32ByteCount] != g_au8SlvData[u32ByteCount])
+N		if(g_u8SlvTxData[u32ByteCount] != g_au8SlvData[u32ByteCount])
 N			nError ++;
 N	}
-N	if(nError == 0)
-N		printf("[OK]\n");
-N	else
-N		printf("[FAIL]\n");
+N#if 0
+S	if(nError == 0)
+S		printf("[OK]\n");
+S	else
+S		printf("[FAIL]\n");
+N#endif
 N}

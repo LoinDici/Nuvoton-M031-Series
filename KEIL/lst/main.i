@@ -24520,25 +24520,6 @@ int main(void)
 
 	printf("[OK]\n");
 
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
     while(1)
 			;
 }

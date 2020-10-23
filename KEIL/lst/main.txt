@@ -240,29 +240,10 @@
 000054  f7fffffe          BL       __2printf
                   |L3.88|
 ;;;107    
-;;;108    	/*Write SPI INFO
-;;;109    	w25q64.device_id[0] = 0xEF;
-;;;110    	w25q64.device_id[1] = 0x16;
-;;;111    	w25q64.version = 0x00;
-;;;112    	w25q64.date[0] = 0x14;
-;;;113    	w25q64.date[1] = 0x2F;
-;;;114    	w25q64.date[2] = 0x0a;
-;;;115    	w25q64.date[3] = 0x2f;
-;;;116    	w25q64.date[4] = 0x13;
-;;;117    	w25q64.calibra_data_start[0] =0x00;
-;;;118    	w25q64.calibra_data_start[1] = 0x00;
-;;;119    	w25q64.calibra_data_start[2] = 0x08;
-;;;120    	w25q64.calibra_data_end[0] = 0x10;
-;;;121    	w25q64.calibra_data_end[1] = 0x00;
-;;;122    	w25q64.calibra_data_end[2] = 0x00;
-;;;123    	
-;;;124    	w25q64.calibra_data = malloc(w25q64.calibra_data_end[0] << 16 | w25q64.calibra_data_end);
-;;;125    	*/
-;;;126    
-;;;127        while(1)
+;;;108        while(1)
 000058  e7fe              B        |L3.88|
-;;;128    			;
-;;;129    }
+;;;109    			;
+;;;110    }
                           ENDP
 
 00005a  0000              DCW      0x0000
