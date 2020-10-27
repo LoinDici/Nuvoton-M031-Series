@@ -193,6 +193,26 @@ void SpiFlash_ChipErase(void)
     SPI_ClearRxFIFO(SPI_FLASH_PORT);
 }
 
+void SpiFlash_Erase(uint32_t flash_addr, uint32_t size)
+{
+	if (size <= 0)
+		return;
+
+	if (size <= SPI_FLASH_SECTOR)
+		SpiFlash_SectorErase(flash_addr);
+
+	if (size == SPI_FLASH_32KB_BLOCK)
+		SpiFlash_BlockErase32KB(flash_addr);
+
+	if (size == SPI_FLASH_64KB_BLOCK)
+		SpiFlash_BlockErase64KB(flash_addr);
+
+	if (size == SPI_FLASH_MEMORY)
+		SpiFlash_ChipErase();
+
+	SpiFlash_WaitReady();
+}
+
 uint8_t SpiFlash_ReadStatusReg(void)
 {
     // /CS: active

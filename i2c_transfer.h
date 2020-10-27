@@ -4,6 +4,12 @@
 #include <stdio.h>
 #include "NuMicro.h"
 
+typedef enum {
+        erase_flash = 0x40,
+        write_flash = 0x80,
+        read_flash = 0xff,
+}SPI_OPS;
+
 typedef void (*I2C_FUNC)(uint32_t u32Status);
 
 void I2C0_Init(void);

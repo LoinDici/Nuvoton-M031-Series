@@ -91,12 +91,11 @@ int main(void)
   I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
 	
 	/* Check ID of SPI Flash */
-	if((u16ID = SpiFlash_ReadMidDid()) != SPI_FALSH_ID) {
+	if((u16ID = SpiFlash_ReadMidDid()) != SPI_FLASH_ID) {
 		printf("Wrong ID, 0x%x\n", u16ID);
-		while(1);
 	} else
 		printf("Flash found: W25Q32 ...\n");
-#if 1
+#if 0
 	{
 		uint32_t addr;
 	/* Erase SPI flash */
@@ -108,7 +107,7 @@ int main(void)
 		}
 	}
 #else
-	SpiFlash_ChipErase();	
+//	SpiFlash_ChipErase();
 #endif
 
 	/* Wait ready */
