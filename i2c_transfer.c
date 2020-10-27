@@ -42,23 +42,6 @@ void I2C0_IRQHandler(void)
     }
 }
 
-void I2C_Rx_Write_To_SPI(uint32_t u32DataSize, uint32_t u32FlashAddress)
-{
-//	printf("Start to normal write data to Flash ...");	
-	/* page program */
-
-//	printf("[OK]\n");
-
-//	printf("Normal read...");
-		/* page read */
-//	SpiFlash_NormalRead(u32FlashAddress, u32DataSize);
-//	printf("OK\n");
-	
-//	Compare(u32DataSize);
-
-//	printf("u32FlashAddress:%d\n", u32FlashAddress);
-}
-
 /*---------------------------------------------------------------------------------------------------------*/
 /*  I2C TRx Callback Function                                                                              */
 /*---------------------------------------------------------------------------------------------------------*/
@@ -88,17 +71,17 @@ void I2C_SlaveTRx(uint32_t u32Status)
 //					printf("slave_buff_addr:%d\n", slave_buff_addr);
 
 			  if (g_u8SlvDataLen == 7 && read_write_flag == 0xff) {
-					printf("Normal read...");
+//					printf("Normal read...");
 					/* page read */
 					SpiFlash_NormalRead(flash_addr, slave_buff_addr);
 					SpiFlash_WaitReady();
-					printf("OK\n");
+//					printf("OK\n");
 					}
 			}	else {
 //				printf("u32Count:%d\n", u32Count);
 				g_au8SlvData[u32Count++] = u8data;
 				if (u32Count == slave_buff_addr) {
-					printf("Start to normal write data to Flash ...");
+//					printf("Start to normal write data to Flash ...");
 					SpiFlash_NormalPageProgram(flash_addr, slave_buff_addr);
 					SpiFlash_WaitReady();
 					u32Count = 0;

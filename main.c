@@ -96,12 +96,13 @@ int main(void)
 		while(1);
 	} else
 		printf("Flash found: W25Q32 ...\n");
-#if 0
+#if 1
 	{
 		uint32_t addr;
 	/* Erase SPI flash */
 		for (addr = 0; addr <= 0x800000; ) {
 			SpiFlash_BlockErase64KB(addr);
+			SpiFlash_WaitReady();
 			addr += 0x10000;
 			printf("addr:%x\n", addr);
 		}
