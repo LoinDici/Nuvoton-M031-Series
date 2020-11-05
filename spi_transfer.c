@@ -56,6 +56,7 @@ uint16_t SpiFlash_ReadMidDid(void)
 
 void SpiFlash_BlockErase64KB(uint32_t StartAddress)
 {
+//		printf("64 block erase\n");
     // /CS: active
     SPI_SET_SS_LOW(SPI_FLASH_PORT);
 
@@ -92,6 +93,7 @@ void SpiFlash_BlockErase64KB(uint32_t StartAddress)
 
 void SpiFlash_BlockErase32KB(uint32_t StartAddress)
 {
+//		printf("32 block erase\n");
     // /CS: active
     SPI_SET_SS_LOW(SPI_FLASH_PORT);
 
@@ -128,6 +130,7 @@ void SpiFlash_BlockErase32KB(uint32_t StartAddress)
 
 void SpiFlash_SectorErase(uint32_t StartAddress)
 {
+//	printf("sector erase\n");
     // /CS: active
     SPI_SET_SS_LOW(SPI_FLASH_PORT);
 
@@ -164,6 +167,7 @@ void SpiFlash_SectorErase(uint32_t StartAddress)
 
 void SpiFlash_ChipErase(void)
 {
+//		printf("chip erase\n");
     // /CS: active
     SPI_SET_SS_LOW(SPI_FLASH_PORT);
 
@@ -211,6 +215,7 @@ void SpiFlash_Erase(uint32_t flash_addr, uint32_t size)
 		SpiFlash_ChipErase();
 
 	SpiFlash_WaitReady();
+//	printf("erase ok\n");
 }
 
 uint8_t SpiFlash_ReadStatusReg(void)
@@ -283,7 +288,8 @@ void SpiFlash_WaitReady(void)
 void SpiFlash_NormalPageProgram(uint32_t StartAddress, uint32_t u32DataSize)
 {
     uint32_t i = 0;
-
+		PB2 = 1;
+		PB3 = 1;
     // /CS: active
     SPI_SET_SS_LOW(SPI_FLASH_PORT);
 
@@ -327,6 +333,8 @@ void SpiFlash_NormalPageProgram(uint32_t StartAddress, uint32_t u32DataSize)
     SPI_SET_SS_HIGH(SPI_FLASH_PORT);
 
     SPI_ClearRxFIFO(SPI_FLASH_PORT);
+		PB2 = 0;
+		PB3 = 0;
 }
 
 void SpiFlash_NormalRead(uint32_t StartAddress, uint32_t u32DataSize)

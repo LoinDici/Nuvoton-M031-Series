@@ -64,7 +64,10 @@ void I2C_SlaveTRx(uint32_t u32Status)
 				g_u8Flag = g_au8SlvRxData[0];
 				flash_addr = (g_au8SlvRxData[1] << 16) + (g_au8SlvRxData[2] << 8) + (g_au8SlvRxData[3]);
 				slave_buff_addr = (g_au8SlvRxData[4] << 16) + (g_au8SlvRxData[5] << 8) + (g_au8SlvRxData[6]);
-
+				if (g_u8SlvDataLen == 7 && g_u8Flag == get_status) {
+//					printf("get status\n");
+					g_u8SlvTxData[0] = SpiFlash_ReadStatusReg();
+				}
 			  if (g_u8SlvDataLen == 7 && g_u8Flag == read_flash) {
 //					printf("Normal read...");
 					/* page read */
@@ -75,7 +78,7 @@ void I2C_SlaveTRx(uint32_t u32Status)
 					SpiFlash_Erase(flash_addr, slave_buff_addr);
 				}
 			}	else {
-//				printf("u32Count:%d\n", u32Count);
+//			printf("u32Count:%d\n", u32Count);
 				g_au8SlvData[u32Count++] = u8data;
 				if (u32Count == slave_buff_addr) {
 //					printf("Start to normal write data to Flash ...");
@@ -84,7 +87,7 @@ void I2C_SlaveTRx(uint32_t u32Status)
 					u32Count = 0;
 //					printf("OK\n");
 				} else if (u32Count > slave_buff_addr) {
-					printf("Error not left space\n");
+//					printf("Error not left space\n");
 					u32Count = 0;
 				}
 			}

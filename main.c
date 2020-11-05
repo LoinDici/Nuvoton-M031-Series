@@ -81,8 +81,8 @@ int main(void)
 	GPIO_SetMode(PB, (BIT2 | BIT3), GPIO_MODE_OUTPUT); 
 		
 	/* Set WP# and HOLD# of SPI Flash to high */ 
-	PB2 = 1;
-	PB3 = 1;
+	PB2 = 0;
+	PB3 = 0;
 	
   /* Init I2C0 */
   I2C0_Init();

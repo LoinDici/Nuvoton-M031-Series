@@ -5,6 +5,7 @@
 #include "NuMicro.h"
 
 typedef enum {
+				get_status = 0x20,
         erase_flash = 0x40,
         write_flash = 0x80,
         read_flash = 0xff,
