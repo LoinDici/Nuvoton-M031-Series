@@ -114,7 +114,7 @@ int main(void)
 	SpiFlash_WaitReady();
 
 	printf("[OK]\n");
-
+	printf("\n\nCPU @ %dHz\n", SystemCoreClock);
     while(1)
 			;
 }

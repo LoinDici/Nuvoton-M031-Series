@@ -6,7 +6,7 @@
 #include "i2c_transfer.h"
 
 #define SPI_FLASH_PORT		SPI0
-#define SPI_FLASH_FREQ		10000000
+#define SPI_FLASH_FREQ		24000000
 #define SPI_FLASH_ID		0xEF16
 #define SPI_FLASH_SECTOR	4096
 #define SPI_FLASH_32KB_BLOCK	32768
@@ -28,16 +28,4 @@ void Compare(uint32_t u32DataSize);
 void SpiFlash_BlockErase64KB(uint32_t StartAddress);
 void SpiFlash_Erase(uint32_t flash_addr, uint32_t size);
 
-typedef struct {
-   uint8_t device_id[2];
-   unsigned char version;
-   unsigned char date[5];
-   unsigned char calibra_data_start[3];
-   unsigned char calibra_data_end[3];
-   unsigned char compensate_data_start[3];
-   unsigned char compensate_data_end[3];
-   void *calibra_data;
-   void *compensate_data;
-   unsigned char md[16];
-}SPI_INFO, *PSPI_INFO;
 #endif

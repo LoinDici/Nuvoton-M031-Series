@@ -21,6 +21,7 @@ void SPI0_Init(void)
 
     /* Disable auto SS function, control SS signal manually */
     SPI_DisableAutoSS(SPI_FLASH_PORT);
+	printf("spi clock:%d\n", SPI_GetBusClock(SPI0));
 }
 
 uint16_t SpiFlash_ReadMidDid(void)
@@ -288,8 +289,9 @@ void SpiFlash_WaitReady(void)
 void SpiFlash_NormalPageProgram(uint32_t StartAddress, uint32_t u32DataSize)
 {
     uint32_t i = 0;
-		PB2 = 1;
-		PB3 = 1;
+
+		PB2 = 0;
+		PB3 = 0;
     // /CS: active
     SPI_SET_SS_LOW(SPI_FLASH_PORT);
 
@@ -333,6 +335,7 @@ void SpiFlash_NormalPageProgram(uint32_t StartAddress, uint32_t u32DataSize)
     SPI_SET_SS_HIGH(SPI_FLASH_PORT);
 
     SPI_ClearRxFIFO(SPI_FLASH_PORT);
+
 		PB2 = 0;
 		PB3 = 0;
 }
