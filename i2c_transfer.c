@@ -18,13 +18,23 @@ volatile uint8_t g_au8SlvRxData[7];
 volatile uint8_t g_u8DeviceAddr;
 volatile uint8_t g_u8SlvDataLen;
 volatile static I2C_FUNC s_I2C0HandlerFn = NULL;
-
+extern uint8_t g_u8SlvI2CWK;
 /*---------------------------------------------------------------------------------------------------------*/
 /*  I2C0 IRQ Handler                                                                                       */
 /*---------------------------------------------------------------------------------------------------------*/
 void I2C0_IRQHandler(void)
 {
     uint32_t u32Status;
+
+		/* Check I2C Wake-up interrupt flag set or not */
+    if(I2C_GET_WAKEUP_FLAG(I2C0))
+    {
+        /* Clear I2C Wake-up interrupt flag */
+        I2C_CLEAR_WAKEUP_FLAG(I2C0);
+        g_u8SlvI2CWK = 1;
+
+        return;
+    }
 
     u32Status = I2C_GET_STATUS(I2C0);
 
@@ -58,6 +68,12 @@ void I2C_SlaveTRx(uint32_t u32Status)
 		break;
 		case 0x80:	/* Previously address with own SLA address Data has been received; ACK has been returned*/
 			u8data = (unsigned char) I2C_GET_DATA(I2C0);
+			if (u8data == 0x0c) {
+				if (SpiFlash_ReadMidDid() == SPI_FLASH_ID)
+					g_u8SlvTxData[0] = 0x0c;
+				else
+					g_u8SlvTxData[0] = 0xc0;
+			}
 //			printf("g_u8SlvDataLen:%d\n", g_u8SlvDataLen);
 			if (g_u8SlvDataLen < 7) {
 				g_au8SlvRxData[g_u8SlvDataLen++] = u8data;
@@ -97,7 +113,7 @@ void I2C_SlaveTRx(uint32_t u32Status)
 			  SpiFlash_WaitReady();
 				u8data = (unsigned char)I2C_GET_DATA(I2C0);
 				slave_buff_addr = 0;
-				//printf("send data:%x\n", g_au8SlvData[slave_buff_addr]);
+//				printf("send data:%x\n", g_u8SlvTxData[slave_buff_addr]);
 				I2C_SET_DATA(I2C0, slave_buff_addr);
 				I2C_SET_DATA(I2C0, g_u8SlvTxData[slave_buff_addr]);
         slave_buff_addr++;

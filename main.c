@@ -4,6 +4,7 @@
 #include "NuMicro.h"
 #include "i2c_transfer.h"
 #include "spi_transfer.h"
+#include "power.h"
 
 void SYS_Init(void)
 {    
@@ -33,6 +34,12 @@ void SYS_Init(void)
 
     /* Enable I2C0 clock */
     CLK_EnableModuleClock(I2C0_MODULE);
+
+    /* Enable IP clock */
+    CLK_EnableModuleClock(TMR0_MODULE);
+
+    /* Select IP clock source */
+    CLK_SetModuleClock(TMR0_MODULE, CLK_CLKSEL1_TMR0SEL_HIRC, 0);
 
     /* Update System Core Clock */
     /* User can use SystemCoreClockUpdate() to calculate SystemCoreClock and CyclesPerUs automatically. */
@@ -66,7 +73,6 @@ void UART0_Init()
 int main(void)
 {
 	uint16_t u16ID;
-//	SPI_INFO w25q64;
 
 	/* Init System, IP clock and multi-function I/O. */
 	SYS_Init();
@@ -89,32 +95,23 @@ int main(void)
 
   /* I2C enter no address SLV mode */
   I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
-	
+
 	/* Check ID of SPI Flash */
 	if((u16ID = SpiFlash_ReadMidDid()) != SPI_FLASH_ID) {
 		printf("Wrong ID, 0x%x\n", u16ID);
 	} else
 		printf("Flash found: W25Q32 ...\n");
-#if 0
-	{
-		uint32_t addr;
-	/* Erase SPI flash */
-		for (addr = 0; addr <= 0x800000; ) {
-			SpiFlash_BlockErase64KB(addr);
-			SpiFlash_WaitReady();
-			addr += 0x10000;
-			printf("addr:%x\n", addr);
-		}
-	}
-#else
-//	SpiFlash_ChipErase();
-#endif
-
-	/* Wait ready */
-	SpiFlash_WaitReady();
 
 	printf("[OK]\n");
 	printf("\n\nCPU @ %dHz\n", SystemCoreClock);
-    while(1)
-			;
+	EnterLowPowerMode();
+
+  while(1) {
+		WakeUpViaI2C();
+		TIMER_Delay(TIMER0, 1000000);
+		/*I2C bus idle*/
+		if (I2C_GET_STATUS(I2C0) == 0xf8)
+			EnterLowPowerMode();
+		}
+
 }
