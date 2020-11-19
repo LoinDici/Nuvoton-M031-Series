@@ -9,3 +9,7 @@
 *.htm
 *.dep
 *.DELL
+*.d
+*.hex
+*.lnp
+
