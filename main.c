@@ -110,8 +110,10 @@ int main(void)
 		WakeUpViaI2C();
 		TIMER_Delay(TIMER0, 1000000);
 		/*I2C bus idle*/
-		if (I2C_GET_STATUS(I2C0) == 0xf8)
-			EnterLowPowerMode();
+		if (I2C_GET_STATUS(I2C0) == 0xf8) {
+			TIMER_Delay(TIMER0, 1000000);
+			if (I2C_GET_STATUS(I2C0) == 0xf8)
+				EnterLowPowerMode();
 		}
-
+	}
 }
