@@ -2,7 +2,7 @@
 #include "spi_transfer.h"
 #include <stdio.h>
 
-volatile uint8_t g_u8SlvPWRDNWK, g_u8SlvI2CWK;
+volatile uint8_t g_u8SlvPWRDNWK, g_u8SlvI2CWK, g_u8PowerStatus;
 
 /*---------------------------------------------------------------------------------------------------------*/
 /*  Power Wake-up IRQ Handler                                                                              */
@@ -60,7 +60,7 @@ void EnterLowPowerMode()
     SYS_LockReg();
 }
 
-void WakeUpViaI2C()
+void WaitingUpViaI2C()
 {
 		/* Unlock protected registers */
     SYS_UnlockReg();
@@ -77,8 +77,8 @@ void WakeUpViaI2C()
     I2C_CLEAR_WAKEUP_DONE(I2C0);
 
     /* Wake-up Interrupt Message */
-    printf("Power-down Wake-up INT 0x%x\n", (unsigned int)((CLK->PWRCTL) & CLK_PWRCTL_PDWKIF_Msk));
-    printf("I2C0 WAKE INT 0x%x\n", I2C0->WKSTS);
+//    printf("Power-down Wake-up INT 0x%x\n", (unsigned int)((CLK->PWRCTL) & CLK_PWRCTL_PDWKIF_Msk));
+//    printf("I2C0 WAKE INT 0x%x\n", I2C0->WKSTS);
 
     /* Disable power wake-up interrupt */
     CLK->PWRCTL &= ~CLK_PWRCTL_PDWKIEN_Msk;
@@ -87,9 +87,9 @@ void WakeUpViaI2C()
     /* Lock protected registers */
     SYS_LockReg();
    
-		printf("\n");
-    printf("Slave wake-up from power down status.\n");
+//		printf("\n");
+//    printf("Slave wake-up from power down status.\n");
 
-    printf("\n");
-    printf("Slave Waiting for receiving data.\n");
+//    printf("\n");
+//   printf("Slave Waiting for receiving data.\n");
 }

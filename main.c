@@ -6,6 +6,8 @@
 #include "spi_transfer.h"
 #include "power.h"
 
+extern uint8_t g_u8PowerStatus;
+
 void SYS_Init(void)
 {    
 		/*---------------------------------------------------------------------------------------------------------*/
@@ -73,6 +75,7 @@ void UART0_Init()
 int main(void)
 {
 	uint16_t u16ID;
+	uint8_t i;
 
 	/* Init System, IP clock and multi-function I/O. */
 	SYS_Init();
@@ -105,15 +108,14 @@ int main(void)
 	printf("[OK]\n");
 	printf("\n\nCPU @ %dHz\n", SystemCoreClock);
 	EnterLowPowerMode();
+	WaitingUpViaI2C();
 
   while(1) {
-		WakeUpViaI2C();
-		TIMER_Delay(TIMER0, 1000000);
-		/*I2C bus idle*/
-		if (I2C_GET_STATUS(I2C0) == 0xf8) {
+		for (i = 0; i < 10; i++)
 			TIMER_Delay(TIMER0, 1000000);
-			if (I2C_GET_STATUS(I2C0) == 0xf8)
-				EnterLowPowerMode();
+		if (g_u8PowerStatus == sys_sleep) {
+			EnterLowPowerMode();
+			WaitingUpViaI2C();
 		}
 	}
 }

@@ -2,6 +2,6 @@
 #define __POWER_H__
 
 void EnterLowPowerMode(void);
-void WakeUpViaI2C(void);
+void WaitingUpViaI2C(void);
 
 #endif

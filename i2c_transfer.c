@@ -18,7 +18,7 @@ volatile uint8_t g_au8SlvRxData[7];
 volatile uint8_t g_u8DeviceAddr;
 volatile uint8_t g_u8SlvDataLen;
 volatile static I2C_FUNC s_I2C0HandlerFn = NULL;
-extern uint8_t g_u8SlvI2CWK;
+extern uint8_t g_u8SlvI2CWK, g_u8PowerStatus;
 /*---------------------------------------------------------------------------------------------------------*/
 /*  I2C0 IRQ Handler                                                                                       */
 /*---------------------------------------------------------------------------------------------------------*/
@@ -31,7 +31,7 @@ void I2C0_IRQHandler(void)
     {
         /* Clear I2C Wake-up interrupt flag */
         I2C_CLEAR_WAKEUP_FLAG(I2C0);
-        g_u8SlvI2CWK = 1;
+				g_u8SlvI2CWK = 1;
 
         return;
     }
@@ -68,30 +68,40 @@ void I2C_SlaveTRx(uint32_t u32Status)
 		break;
 		case 0x80:	/* Previously address with own SLA address Data has been received; ACK has been returned*/
 			u8data = (unsigned char) I2C_GET_DATA(I2C0);
-			if (u8data == 0x0c) {
-				if (SpiFlash_ReadMidDid() == SPI_FLASH_ID)
-					g_u8SlvTxData[0] = 0x0c;
-				else
-					g_u8SlvTxData[0] = 0xc0;
-			}
 //			printf("g_u8SlvDataLen:%d\n", g_u8SlvDataLen);
 			if (g_u8SlvDataLen < 7) {
 				g_au8SlvRxData[g_u8SlvDataLen++] = u8data;
 				g_u8Flag = g_au8SlvRxData[0];
 				flash_addr = (g_au8SlvRxData[1] << 16) + (g_au8SlvRxData[2] << 8) + (g_au8SlvRxData[3]);
 				slave_buff_addr = (g_au8SlvRxData[4] << 16) + (g_au8SlvRxData[5] << 8) + (g_au8SlvRxData[6]);
-				if (g_u8SlvDataLen == 7 && g_u8Flag == get_status) {
-//					printf("get status\n");
-					g_u8SlvTxData[0] = SpiFlash_ReadStatusReg();
-				}
-			  if (g_u8SlvDataLen == 7 && g_u8Flag == read_flash) {
-//					printf("Normal read...");
-					/* page read */
-					SpiFlash_NormalRead(flash_addr, slave_buff_addr);
+				switch (g_u8Flag) {
+					case test_flash:
+						if (SpiFlash_ReadMidDid() == SPI_FLASH_ID)
+							g_u8SlvTxData[0] = 0x0c;
+						else
+							g_u8SlvTxData[0] = 0xc0;
+					break;
+					case sys_sleep:
+						g_u8PowerStatus = sys_sleep;
+					break;
+					case sys_wakeup:
+						g_u8PowerStatus = sys_wakeup;
+						g_u8SlvTxData[0] = sys_wakeup;
+					break;
+					case get_status:
+	//				printf("get status\n");
+						g_u8SlvTxData[0] = SpiFlash_ReadStatusReg();
+					break;
+					case read_flash:
+						if (g_u8SlvDataLen == 7)
+	//				printf("Normal read...");
+							SpiFlash_NormalRead(flash_addr, slave_buff_addr);
 //					printf("OK\n");
-					}
-				if (g_u8SlvDataLen == 7 && g_u8Flag == erase_flash){
-					SpiFlash_Erase(flash_addr, slave_buff_addr);
+					break;
+					case erase_flash:
+						if (g_u8SlvDataLen == 7)
+							SpiFlash_Erase(flash_addr, slave_buff_addr);
+					break;
 				}
 			}	else {
 //			printf("u32Count:%d\n", u32Count);
