@@ -109,7 +109,6 @@ void I2C_SlaveTRx(uint32_t u32Status)
 				if (u32Count == slave_buff_addr) {
 //					printf("Start to normal write data to Flash ...");
 					SpiFlash_NormalPageProgram(flash_addr, slave_buff_addr);
-					SpiFlash_WaitReady();
 					u32Count = 0;
 //					printf("OK\n");
 				} else if (u32Count > slave_buff_addr) {
@@ -120,7 +119,7 @@ void I2C_SlaveTRx(uint32_t u32Status)
 			I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
 		break;
 		case 0xA8:	/* Own SLA+R has been receive; ACK has been return */
-			  SpiFlash_WaitReady();
+//			  SpiFlash_WaitReady();
 				u8data = (unsigned char)I2C_GET_DATA(I2C0);
 				slave_buff_addr = 0;
 //				printf("send data:%x\n", g_u8SlvTxData[slave_buff_addr]);
@@ -130,7 +129,7 @@ void I2C_SlaveTRx(uint32_t u32Status)
         I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
 		break;
 		case 0xB8:	/* Data byte in I2CDAT has been transmitted ACK has been received */
-			SpiFlash_WaitReady();
+//			SpiFlash_WaitReady();
 			I2C_SET_DATA(I2C0, g_u8SlvTxData[slave_buff_addr++]);
       I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
 		break;

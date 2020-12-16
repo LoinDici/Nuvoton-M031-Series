@@ -6,7 +6,7 @@
 #include "i2c_transfer.h"
 
 #define SPI_FLASH_PORT		SPI0
-#define SPI_FLASH_FREQ		24000000
+#define SPI_FLASH_FREQ		48000000
 #define SPI_FLASH_ID		0xEF16
 #define SPI_FLASH_SECTOR	4096
 #define SPI_FLASH_32KB_BLOCK	32768

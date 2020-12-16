@@ -7,7 +7,6 @@
 
 extern uint8_t g_au8SlvData[PAGE_LENGTH];
 extern uint8_t g_u8SlvTxData[PAGE_LENGTH];
-
 void SPI0_Init(void)
 {
     /* Set PA.0 for SPI0_MOSI, PA.1 for SPI0_MISO, PA.2 for SPI0_CLK, PA.3 for SPI0_SS */
@@ -205,7 +204,7 @@ void SpiFlash_Erase(uint32_t flash_addr, uint32_t size)
 
 	if (size <= SPI_FLASH_SECTOR)
 		SpiFlash_SectorErase(flash_addr);
-
+#if 0
 	if (size == SPI_FLASH_32KB_BLOCK)
 		SpiFlash_BlockErase32KB(flash_addr);
 
@@ -214,8 +213,8 @@ void SpiFlash_Erase(uint32_t flash_addr, uint32_t size)
 
 	if (size == SPI_FLASH_MEMORY)
 		SpiFlash_ChipErase();
-
-	SpiFlash_WaitReady();
+#endif
+//	SpiFlash_WaitReady();
 //	printf("erase ok\n");
 }
 
