@@ -7,6 +7,8 @@
 
 extern uint8_t g_au8SlvData[PAGE_LENGTH];
 extern uint8_t g_u8SlvTxData[PAGE_LENGTH];
+extern uint8_t	g_read_flash_done;
+extern uint8_t	g_write_flash_done;
 void SPI0_Init(void)
 {
     /* Set PA.0 for SPI0_MOSI, PA.1 for SPI0_MISO, PA.2 for SPI0_CLK, PA.3 for SPI0_SS */
@@ -289,8 +291,8 @@ void SpiFlash_NormalPageProgram(uint32_t StartAddress, uint32_t u32DataSize)
 {
     uint32_t i = 0;
 
-		PB2 = 0;
-		PB3 = 0;
+		PB2 = 1;
+		PB3 = 1;
     // /CS: active
     SPI_SET_SS_LOW(SPI_FLASH_PORT);
 
@@ -337,6 +339,7 @@ void SpiFlash_NormalPageProgram(uint32_t StartAddress, uint32_t u32DataSize)
 
 		PB2 = 0;
 		PB3 = 0;
+		g_write_flash_done = 1;
 }
 
 void SpiFlash_NormalRead(uint32_t StartAddress, uint32_t u32DataSize)
@@ -375,22 +378,5 @@ void SpiFlash_NormalRead(uint32_t StartAddress, uint32_t u32DataSize)
 
     // /CS: de-active
     SPI_SET_SS_HIGH(SPI_FLASH_PORT);
-}
-
-void Compare(uint32_t u32DataSize)
-{
-	uint32_t u32ByteCount;
-	uint32_t nError = 0;
-	
-//	printf("Compare...");
-	for(u32ByteCount = 0; u32ByteCount < u32DataSize; u32ByteCount++) {
-		if(g_u8SlvTxData[u32ByteCount] != g_au8SlvData[u32ByteCount])
-			nError ++;
-	}
-#if 0
-	if(nError == 0)
-		printf("[OK]\n");
-	else
-		printf("[FAIL]\n");
-#endif
+		g_read_flash_done = 1;
 }

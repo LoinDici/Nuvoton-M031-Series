@@ -4,13 +4,18 @@
 #include <stdio.h>
 #include "NuMicro.h"
 
+#define VERSION	"0.0.2"
+
 typedef enum {
 				test_flash = 0x0c,
 				sys_wakeup = 0x10,
 				get_status = 0x20,
 				sys_sleep = 0x30,
         erase_flash = 0x40,
+				mcu_ver = 0x50,
         write_flash = 0x80,
+				write_flash_done = 0x90,
+				read_flash_done = 0xa0,
         read_flash = 0xff,
 }SPI_OPS;
 

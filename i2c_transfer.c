@@ -10,10 +10,15 @@
 /*---------------------------------------------------------------------------------------------------------*/
 volatile uint32_t slave_buff_addr;
 volatile uint32_t flash_addr;
+volatile uint8_t	g_read_flash_done;
+volatile uint8_t	g_write_flash_done;
 volatile uint8_t g_u8Flag;
 volatile uint8_t g_au8SlvData[PAGE_LENGTH];
 volatile uint8_t g_u8SlvTxData[PAGE_LENGTH];
 volatile uint8_t g_au8SlvRxData[7];
+volatile uint8_t g_u8FlashStatus;
+volatile uint8_t g_u8ReadFlashFlag;
+volatile uint8_t g_u8WriteFlashFlag;
 
 volatile uint8_t g_u8DeviceAddr;
 volatile uint8_t g_u8SlvDataLen;
@@ -59,7 +64,6 @@ void I2C_SlaveTRx(uint32_t u32Status)
 {
 	uint8_t u8data;
 	static uint32_t u32Count = 0;
-//	printf("status:%x\n", u32Status);
 	switch (u32Status) {
 		case 0x60:		/* Own SLA+W has been receive; ACK has been return */
 			g_u8SlvDataLen = 0;
@@ -68,86 +72,123 @@ void I2C_SlaveTRx(uint32_t u32Status)
 		break;
 		case 0x80:	/* Previously address with own SLA address Data has been received; ACK has been returned*/
 			u8data = (unsigned char) I2C_GET_DATA(I2C0);
-//			printf("g_u8SlvDataLen:%d\n", g_u8SlvDataLen);
+
 			if (g_u8SlvDataLen < 7) {
+
 				g_au8SlvRxData[g_u8SlvDataLen++] = u8data;
 				g_u8Flag = g_au8SlvRxData[0];
-				flash_addr = (g_au8SlvRxData[1] << 16) + (g_au8SlvRxData[2] << 8) + (g_au8SlvRxData[3]);
-				slave_buff_addr = (g_au8SlvRxData[4] << 16) + (g_au8SlvRxData[5] << 8) + (g_au8SlvRxData[6]);
+
+				if (g_u8SlvDataLen == 7) {
+					flash_addr = (g_au8SlvRxData[1] << 16) + (g_au8SlvRxData[2] << 8) + (g_au8SlvRxData[3]);
+					slave_buff_addr = (g_au8SlvRxData[4] << 16) + (g_au8SlvRxData[5] << 8) + (g_au8SlvRxData[6]);
+				}
+
 				switch (g_u8Flag) {
-					case test_flash:
-						if (SpiFlash_ReadMidDid() == SPI_FLASH_ID)
-							g_u8SlvTxData[0] = 0x0c;
-						else
-							g_u8SlvTxData[0] = 0xc0;
+					case write_flash_done:
+						g_u8ReadFlashFlag = 1;
+						g_u8FlashStatus = g_write_flash_done;
 					break;
+
+					case read_flash_done:
+						g_u8WriteFlashFlag = 1;
+						g_u8FlashStatus = g_read_flash_done;
+					break;
+
+					case mcu_ver:
+						strcpy((char *)g_u8SlvTxData, VERSION);
+					break;
+
+					case test_flash:
+						if (SpiFlash_ReadMidDid() == SPI_FLASH_ID) {
+							g_u8SlvTxData[0] = SPI_FLASH_ID >> 8;
+							g_u8SlvTxData[1] = SPI_FLASH_ID & 0xFF;
+						} else
+							g_u8SlvTxData[0] = 0xFF;
+					break;
+
 					case sys_sleep:
 						g_u8PowerStatus = sys_sleep;
 					break;
+
 					case sys_wakeup:
 						g_u8PowerStatus = sys_wakeup;
 						g_u8SlvTxData[0] = sys_wakeup;
 					break;
+
 					case get_status:
-	//				printf("get status\n");
 						g_u8SlvTxData[0] = SpiFlash_ReadStatusReg();
 					break;
+
 					case read_flash:
-						if (g_u8SlvDataLen == 7)
-	//				printf("Normal read...");
+						if (g_u8SlvDataLen == 7) {
+							g_read_flash_done = 0;
+							I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
 							SpiFlash_NormalRead(flash_addr, slave_buff_addr);
-//					printf("OK\n");
+							return;
+						}
 					break;
+
 					case erase_flash:
 						if (g_u8SlvDataLen == 7)
 							SpiFlash_Erase(flash_addr, slave_buff_addr);
 					break;
 				}
 			}	else {
-//			printf("u32Count:%d\n", u32Count);
 				g_au8SlvData[u32Count++] = u8data;
-				if (u32Count == slave_buff_addr) {
-//					printf("Start to normal write data to Flash ...");
+
+				if (g_u8Flag == write_flash && u32Count == slave_buff_addr) {
+					g_write_flash_done = 0;
+					I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
 					SpiFlash_NormalPageProgram(flash_addr, slave_buff_addr);
 					u32Count = 0;
-//					printf("OK\n");
+					return;
 				} else if (u32Count > slave_buff_addr) {
-//					printf("Error not left space\n");
 					u32Count = 0;
 				}
 			}
 			I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
 		break;
+
 		case 0xA8:	/* Own SLA+R has been receive; ACK has been return */
-//			  SpiFlash_WaitReady();
-				u8data = (unsigned char)I2C_GET_DATA(I2C0);
-				slave_buff_addr = 0;
-//				printf("send data:%x\n", g_u8SlvTxData[slave_buff_addr]);
+			u8data = (unsigned char)I2C_GET_DATA(I2C0);
+			slave_buff_addr = 0;
+
+			if (g_u8ReadFlashFlag || g_u8WriteFlashFlag) {
+				I2C_SET_DATA(I2C0, slave_buff_addr);
+				I2C_SET_DATA(I2C0, g_u8FlashStatus);
+				g_u8ReadFlashFlag = 0;
+				g_u8WriteFlashFlag = 0;
+			} else {
 				I2C_SET_DATA(I2C0, slave_buff_addr);
 				I2C_SET_DATA(I2C0, g_u8SlvTxData[slave_buff_addr]);
-        slave_buff_addr++;
-        I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
+				slave_buff_addr++;
+			}
+      I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
 		break;
+
 		case 0xB8:	/* Data byte in I2CDAT has been transmitted ACK has been received */
-//			SpiFlash_WaitReady();
 			I2C_SET_DATA(I2C0, g_u8SlvTxData[slave_buff_addr++]);
       I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
 		break;
+
 		case 0xC0:	/* Data byte or last data in I2CDAT has been transmitted Not ACK has been received */
 			I2C_SET_DATA(I2C0, g_u8SlvTxData[slave_buff_addr++]);
 			slave_buff_addr = 0;
       I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
 		break;
+
 		case 0x88:	/* Previously addressed with own SLA address; NOT ACK has been returned */
 			g_u8SlvDataLen = 0;
 			u32Count = 0;
       I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
 		break;
+
 		case 0xA0:	/* A STOP or repeated START has been received while still addressed as Slave/Receiver*/
 			g_u8SlvDataLen = 0;
 			u32Count = 0;
       I2C_SET_CONTROL_REG(I2C0, I2C_CTL_SI_AA);
 		break;
+
 		default:
 			printf("Status 0x%x is NOT processed\n", u32Status);
 		break;

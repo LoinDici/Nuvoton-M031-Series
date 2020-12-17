@@ -105,13 +105,16 @@ int main(void)
 	} else
 		printf("Flash found: W25Q32 ...\n");
 
+	g_u8PowerStatus = sys_sleep;
+
 	printf("[OK]\n");
 	printf("\n\nCPU @ %dHz\n", SystemCoreClock);
+	printf("VERSION: %s\n", VERSION);
 	EnterLowPowerMode();
 	WaitingUpViaI2C();
 
   while(1) {
-		for (i = 0; i < 10; i++)
+		for (i = 0; i < 20; i++)
 			TIMER_Delay(TIMER0, 1000000);
 		if (g_u8PowerStatus == sys_sleep) {
 			EnterLowPowerMode();
